@@ -45,13 +45,22 @@ class AddForeignKeys extends Migration
      */
     public function down()
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+        });
 
+        Schema::table('articles', function (Blueprint $table) {
+            $table->dropForeign(['product_id']);
+            $table->dropForeign(['command_id']);
+        });
 
+        Schema::table('workers', function (Blueprint $table) {
+            $table->dropForeign(['department_id']);
+            $table->dropForeign(['post_id']);
+        });
 
-
-
-
-
-
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropForeign(['department_id']);
+        });
     }
 }

@@ -31,10 +31,6 @@ class CreateWorkersTable extends Migration
      */
     public function down()
     {
-        Schema::table('workers', function (Blueprint $table) {
-            $table->dropForeign(['department_id']);
-            $table->dropForeign(['post_id']);
-        });
         Schema::dropIfExists('workers');
     }
 }

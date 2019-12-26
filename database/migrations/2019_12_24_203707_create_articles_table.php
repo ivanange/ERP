@@ -29,10 +29,6 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
-        Schema::table('articles', function (Blueprint $table) {
-            $table->dropForeign(['product_id']);
-            $table->dropForeign(['command_id']);
-        });
         Schema::dropIfExists('articles');
     }
 }
