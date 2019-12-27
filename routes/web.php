@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resources([
+    'photos' => 'PhotoController',
+    'posts' => 'PostController'
+]);

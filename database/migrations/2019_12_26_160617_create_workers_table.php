@@ -18,6 +18,7 @@ class CreateWorkersTable extends Migration
             $table->string('name', 500);
             $table->string('surname', 500);
             $table->string('address', 500);
+            $table->string('password', 1000);
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('post_id');
 
