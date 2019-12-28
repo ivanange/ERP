@@ -11,3 +11,9 @@ window.Vue = require('vue');
 const app = new Vue({
     el: '#app',
 });
+
+/*
+axios.get("/").then(function (data) {
+    console.log(data);
+});
+*/

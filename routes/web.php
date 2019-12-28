@@ -15,7 +15,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*
+
+Route::get('/json', function () {
+    return response()->json([
+        'name' => 'Abigail',
+        'state' => 'CA'
+    ]);
+});
+
+*/
+
 Route::resources([
-    'photos' => 'PhotoController',
-    'posts' => 'PostController'
+    'flows' => 'FlowController',
+    'categories' => 'CategoryController',
+    'departments' => 'DepartmentController',
+    'flowcategories' => 'FlowcategoryController',
+    'posts' => 'PostController',
+    'products' => 'ProductController',
+    'commands' => 'CommandController',
+    'workers' => 'WorkerController'
 ]);
