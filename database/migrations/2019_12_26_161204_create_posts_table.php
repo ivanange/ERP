@@ -18,8 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('name', 500);
             $table->longText('desc');
             $table->unsignedDecimal('baseSalary', 20, 4);
-            $table->unsignedBigInteger('department_id');
-
+            $table->unsignedBigInteger('department_id')->nullable();
         });
     }
 
