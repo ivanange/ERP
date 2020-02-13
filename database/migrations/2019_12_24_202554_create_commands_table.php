@@ -16,10 +16,12 @@ class CreateCommandsTable extends Migration
     {
         Schema::create('commands', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name', 500)->nullable();
             $table->dateTime('issueDate')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->dateTime('deliveryDate')->nullable();
             $table->unsignedTinyInteger('status')->default(1);  // 1 = encours, 2 = livré, 3 = annuler
             $table->softDeletes();
+            //$table->timestamps();
         });
     }
 

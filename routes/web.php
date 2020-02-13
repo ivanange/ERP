@@ -1,5 +1,8 @@
 <?php
 
+use App\Command;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,28 +14,45 @@
 |
 */
 
+
+
+
+Route::get('/login', function () {
+    return view('welcome');
+})->name('login');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-/*
-
-Route::get('/json', function () {
-    return response()->json([
-        'name' => 'Abigail',
-        'state' => 'CA'
-    ]);
+Route::get('/home', function () {
+    return view('welcome');
 });
 
-*/
-
 Route::resources([
-    'flows' => 'FlowController',
     'categories' => 'CategoryController',
-    'departments' => 'DepartmentController',
-    'flowcategories' => 'FlowcategoryController',
-    'posts' => 'PostController',
     'products' => 'ProductController',
     'commands' => 'CommandController',
-    'workers' => 'WorkerController'
 ]);
+
+/*
+ Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::get('/home', function () {
+        return view('welcome');
+    });
+
+    Route::resources([
+        'categories' => 'CategoryController',
+        'products' => 'ProductController',
+        'commands' => 'CommandController',
+    ]);
+});
+ */
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
