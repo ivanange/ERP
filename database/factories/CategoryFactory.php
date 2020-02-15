@@ -19,8 +19,9 @@ use Faker\Generator as Faker;
 
 
 $factory->define(Category::class, function (Faker $faker) {
+    $faker->addProvider(new Bezhanov\Faker\Provider\Commerce($faker));
     return [
-        "name" => rtrim($faker->text($faker->numberBetween(10, 30)), "."),
-        "desc" => $faker->boolean(70) ? $faker->sentence : null,
+        "name" => $faker->unique(true)->department(1),
+        "desc" => $faker->boolean(80) ? $faker->sentences(3,  true) : null,
     ];
 });

@@ -15,26 +15,24 @@ class AddForeignKeys extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->foreign('category_id')
-            ->references('id')->on('categories');
+                ->references('id')->on('categories');
         });
 
         Schema::table('articles', function (Blueprint $table) {
             $table->foreign('product_id')
-            ->references('id')->on('products');
+                ->references('id')->on('products');
             $table->foreign('command_id')
-            ->references('id')->on('commands');
+                ->references('id')->on('commands');
         });
 
         Schema::table('workers', function (Blueprint $table) {
-            $table->foreign('department_id')
-            ->references('id')->on('departments');
             $table->foreign('post_id')
-            ->references('id')->on('posts');
+                ->references('id')->on('posts');
         });
 
         Schema::table('posts', function (Blueprint $table) {
             $table->foreign('department_id')
-            ->references('id')->on('departments');
+                ->references('id')->on('departments');
         });
     }
 
@@ -55,7 +53,6 @@ class AddForeignKeys extends Migration
         });
 
         Schema::table('workers', function (Blueprint $table) {
-            $table->dropForeign(['department_id']);
             $table->dropForeign(['post_id']);
         });
 

@@ -15,13 +15,13 @@ class CreateFlowcategoryTable extends Migration
     {
         Schema::create('flowcategory', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nom', 500);
+            $table->string('name', 500);
             $table->longText('desc')->nullable();
         });
 
         Schema::table('flows', function (Blueprint $table) {
             $table->foreign('category_id')
-            ->references('id')->on('flowcategory');
+                ->references('id')->on('flowcategory');
         });
     }
 

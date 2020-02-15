@@ -2,32 +2,11 @@
 
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
+use Faker\UniqueGenerator as UniqueFaker;
 
 class ProductionSeeder extends Seeder
 {
 
-    public $categories = [
-        "Antibiotic / Antibactériens ",
-        "Calmants / Antidouleur / Anesthésique",
-        "Vaccins / Antiviraux",
-        "Anti-Paludéen / Fiévre",
-        "Tranquillisants / Anti-Depresseurs / Somnifaire",
-        "Antipyrétiques",
-        "Antiseptiques / Déinfectants",
-        "Stimulants ",
-        "Contraceptifs oraux",
-        "Antifongique",
-        "Anticholinergiques",
-        "Vitamines / Anabolisants",
-        "Analgésiques et Anti-inflammatoires",
-        "Antituberculeux et Antilépreux",
-        "Cancérologique et hématologique ",
-        "Antigoutteux",
-        "Antiallergiques / Antianaphylactiques",
-        "Antidotes",
-        "Anticonvulsants / Antiepileptiques",
-        " Inhibiteurs nucléosidiques/nucléotidiques"
-    ];
 
     /**
      * Run the database seeds.
@@ -37,23 +16,64 @@ class ProductionSeeder extends Seeder
     public function run(Faker $faker)
     {
 
-        foreach ($this->categories as $name) {
-            $category = factory(App\Category::class)->create(["name" => $name]);
+        // stock management module
+        factory(App\Category::class, 20)->create()->each(function ($category) use ($faker) {
             $category->products()->createMany(
-                factory(App\Product::class, $faker->numberBetween(5, 15))->make()->toArray()
+                factory(App\Product::class, $faker->numberBetween(5, 10))->make()->toArray()
             );
-        }
+        });
 
         $this->call([
             CommandsTableSeeder::class,
         ]);
-        /*
 
-        factory(App\User::class, 10)->create([
+        // employee management module
+        factory(App\Department::class, 10)->create()->each(function ($department) use ($faker) {
+            $posts = $department->posts()->createMany(
+                factory(App\Post::class, $faker->numberBetween(8, 12))->make()->toArray()
+            );
+
+            $posts->each(function ($post) {
+                $post->worker()->create(
+                    factory(App\Worker::class)->make(['post_id' => $post->id])->toArray()
+                );
+            });
+        });
+
+
+        // accounting module
+        factory(App\FlowCategory::class, 6)->create()->each(function ($flowcategory) use ($faker) {
+            $flows = factory(App\Flow::class, 3)->make();
+
+            $flows =  $flows->map(function ($flow) use ($flowcategory) {
+                $faker = new Faker;
+                $faker->addProvider(new \App\Faker\CustomProvider($faker));
+
+                $data = $faker->unique()->enterpriseFlow(key_exists($flowcategory->name, $faker->flows["in"]) ? "in" : "out", null, $flowcategory->name);
+                $flow->name = $data['name'];
+                $flow->frequency = $data['frequency'];
+                return $flow;
+            });
+
+            $flowcategory->flows()->createMany(
+                $flows->toArray()
+            )->each(function ($flow) use ($faker) {
+                $flow->dues()->createMany(
+                    factory(App\Due::class, $flow->frequency ?  $faker->numberBetween(1, 3) : 1)->make($flow->amount !== null ? ['amount' => $flow->amount] : [])->toArray()
+                );
+            });
+        });
+
+        //create admin worker
+
+        factory(App\Worker::class, 10)->create([
             "name" => "admin",
             "email" => "admin@email.com",
-            "password" => bcrypt('admin')
+            "gender" => "Male",
+            "username" => "admin",
+            "address" => "admin",
+            "password" => bcrypt('admin'),
+            "post_id" => factory(App\Post::class)->create()->id
         ]);
- */
     }
 }

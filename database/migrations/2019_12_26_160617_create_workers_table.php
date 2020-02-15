@@ -19,14 +19,13 @@ class CreateWorkersTable extends Migration
             $table->string('surname', 100)->nullable();
             $table->string('telephone', 50)->nullable();
             $table->date('birthdate')->nullable();
-            $table->enum('sex', ['M', 'F']);
             $table->string('email', 100)->nullable();
-            $table->string('username', 100);
             $table->string('title', 50)->default('MR');
+            $table->enum('gender', ['Male', 'Female']);
+            $table->string('username', 100);
             $table->string('address', 200);
             $table->string('password', 500);
             $table->unsignedBigInteger('permissions')->default(0);
-            $table->unsignedBigInteger('department_id')->nullable();
             $table->unsignedBigInteger('post_id');
             $table->rememberToken();
             $table->softDeletes();

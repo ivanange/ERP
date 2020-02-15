@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Worker extends Model
 {
     use SoftDeletes;
-    public $fillable = ['username', 'name', 'password',];
 
+    public $fillable = [
+        'username', 'name', 'password', 'surname', 'telephone', 'birthdate', 'email',
+        'title', 'gender', 'address', 'permissions', 'post_id'
+    ];
     public $timestamps = false;
-    protected $hidden = ['password'];
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
     public function post()
     {
@@ -20,6 +25,6 @@ class Worker extends Model
 
     public function department()
     {
-        return $this->belongsTo('App\Department');
+        return $this->hasOneThrough('App\Department', 'App\Post');
     }
 }

@@ -15,14 +15,14 @@ class CreateFlowsTable extends Migration
     {
         Schema::create('flows', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->softDeletes();
             $table->unsignedTinyInteger('type'); // 1 = entrer, 2 = sortie
-            $table->unsignedDecimal('amount', 20, 4);
-            $table->string('name', 500);
+            $table->string('name', 200);
             $table->longText('desc')->nullable();
-            $table->unsignedBigInteger('frequency')->nullable(); // null means once 
+            $table->unsignedDecimal('amount', 20, 4)->nullable();
+            $table->string('frequency', 200)->nullable(); // null means once
             $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

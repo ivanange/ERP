@@ -17,24 +17,25 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(Product::class, function (Faker $faker) {
-    $faker = \Faker\Factory::create();
-    $faker->addProvider(new \Bezhanov\Faker\Provider\Medicine($faker));
+    //$faker = \Faker\Factory::create();
+    $faker->addProvider(new Bezhanov\Faker\Provider\Commerce($faker));
     return  [
-        "name" => $faker->medicine,
+        "name" => $faker->productName,
         "manufacturer" => $faker->company,
-        //"image" => $faker->boolean ? $faker->image('public/storage/images', 640, 480, null, false) : null,
+        //"image" => $faker->optional(0.2, null)->image('public/storage/images', 640, 480, null, false),
         "weight" => $faker->randomFloat(2, 200, 1000),
-        "price" => $faker->randomFloat(2, 1, 10000),
-        "qte" => $faker->numberBetween(5, 60),
-        "expireDate" => $faker->dateTimeBetween(
-            $faker->randomElement(['now', '-1 month']),
-            $faker->randomElement(['+5 monthsr', 'now', '+1 month']),
-            'utc'
-        ),
+        "price" => $faker->randomFloat(2, 50, 15000),
+        "qte" => $faker->numberBetween(5, 30),
+        "expireDate" => $faker->boolean(70) ?
+            $faker->dateTimeBetween(
+                $faker->randomElement(['now', '-1 month']),
+                $faker->randomElement(['+5 months', 'now', '+1 month']),
+                'utc'
+            ) : null,
     ];
 });
 
-$factory->state(App\User::class, 'relate', function ($faker) {
+$factory->state(App\Product::class, 'relate', function ($faker) {
     return [
         'category_id' => function () {
             return factory(App\Category::class)->create()->id;
