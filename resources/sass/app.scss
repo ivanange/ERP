@@ -1,8 +1,70 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
-@import 'variables';
+//@import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
+
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    background-color: var(--light);
+}
+
+.custom .vs__dropdown-toggle {
+    height: 100%;
+    border-radius: 0px;
+}
+
+.custom-content.modal-content {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    width: auto;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.custom-radio .custom-control-input:checked~.custom-control-label::before,
+.custom-radio .custom-control-input:checked~.custom-control-label::after {
+    background-color: var(--info);
+    border-color: var(--info);
+    border-radius: 50%;
+}
+
+
+html body {
+    .vdatetime-calendar__month__day--selected {
+
+        &>span>span,
+        &:hover>span>span {
+            color: #fff;
+            background: var(--info);
+        }
+    }
+
+    .vdatetime-popup__header {
+        background: var(--info);
+
+        &,
+        .vdatetime-popup {
+            border-radius: 3px;
+        }
+    }
+
+    .vdatetime-time-picker__item--selected,
+    .vdatetime-popup__actions__button {
+        color: var(--info);
+    }
+}

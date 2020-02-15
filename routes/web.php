@@ -21,22 +21,7 @@ Route::get('/login', function () {
     return view('welcome');
 })->name('login');
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', function () {
-    return view('welcome');
-});
-
-Route::resources([
-    'categories' => 'CategoryController',
-    'products' => 'ProductController',
-    'commands' => 'CommandController',
-]);
-
-/*
- Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
@@ -51,8 +36,3 @@ Route::resources([
         'commands' => 'CommandController',
     ]);
 });
- */
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

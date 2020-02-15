@@ -68,7 +68,7 @@ export default {
   methods: {
     Log() {
       this.$http
-        .post("/api/login", { name: this.userlogin, password: this.userpass })
+        .post("/api/login", { username: this.userlogin, password: this.userpass })
         .then(res => {
           if (res.ok) {
             this.$store.commit("setLogged", true);
