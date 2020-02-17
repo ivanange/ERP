@@ -1,8 +1,36 @@
 <template>
   <div class="custom-scroll overflow-auto" style="max-height: 100%;">
+    <b-list-group v-if="this.productsList.length && this.listview">
+      <b-list-group-item class="d-flex justify-content-between align-items-center w-100">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="width: calc( 100% - 50px );"
+        >
+          <span class="font-weight-bold" style="width: 20%;">Name</span>
+          <span class="font-weight-bold" style="width: 10%;">Price</span>
+          <span class="font-weight-bold text-center" style="width: 10%;">Quantity</span>
+          <span class="font-weight-bold" style="width: 10%;">Weight</span>
+          <span class="font-weight-bold" style="width: 10%;">Status</span>
+          <span class="font-weight-bold" style="width: 20%;">Manufacturer</span>
+          <span class="font-weight-bold text-center" style="width: 20%;">Category</span>
+        </div>
+        <span class="font-weight-bold">Actions</span>
+      </b-list-group-item>
+      <ProductItem
+        v-for="product in this.productsList"
+        articleStyle="max-height: 280px; overflow: auto;"
+        :product="product"
+        target="confirmDelete"
+        :key="product.id"
+        @confirm="confirm"
+        :style=" listview ? '' : 'max-height:600px; width: 400px;'"
+        :class="listview ? '' : 'my-3'"
+      />
+    </b-list-group>
+
     <b-card-group
       columns
-      v-if="this.productsList.length"
+      v-if="this.productsList.length && !this.listview"
       class="p-3 custom-scroll ovarflow-auto"
       style="max-height: 100%;"
     >

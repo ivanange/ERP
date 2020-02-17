@@ -2,7 +2,7 @@
   <div
     class="main-container d-flex justify-content-center align-items-center flex-column custom-scroll"
   >
-    <b-form @submit.prevent="serialize" v-if="show" action="/products" method="post">
+    <b-form @submit.prevent="serialize" v-if="show" action="/stock/products" method="post">
       <h2 class="mb-3">Product</h2>
       <b-form-input
         id="name"
@@ -78,7 +78,7 @@
       </b-form-group>
       <b-form-file v-model="file" accept="image/*" class="mt-3"></b-form-file>
       <div class="d-flex justify-content-end mt-3 mb-2">
-        <b-button type="submit" class="mr-2" variant="info" style="min-width:70px;">Save</b-button>
+        <b-button type="submit" class="mr-2" variant="dark" style="min-width:70px;">Save</b-button>
       </div>
     </b-form>
   </div>
@@ -194,7 +194,7 @@ export default {
           if (this.loaded && !this.propProduct.id) {
             if (this.setupProduct()) {
             } else {
-              this.$router.push("/products");
+              this.$router.push("/stock/products");
             }
           }
         },

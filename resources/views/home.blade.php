@@ -1,23 +1,21 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ERP</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div>
+<body style="width: 100vw; height:100vh">
+    <div id="app" class="custom-scroll w-100 h-100 d-flex flex-column overflow-auto" style="max-height: 100%;">
+        <Navbar></Navbar>
+        <router-view> </router-view>
     </div>
-</div>
-@endsection
+
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

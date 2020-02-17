@@ -21,7 +21,7 @@ use Faker\Generator as Faker;
 $factory->define(Category::class, function (Faker $faker) {
     $faker->addProvider(new Bezhanov\Faker\Provider\Commerce($faker));
     return [
-        "name" => $faker->unique(true)->department(1),
+        "name" => $faker->unique()->department(1),
         "desc" => $faker->boolean(80) ? $faker->sentences(3,  true) : null,
     ];
 });

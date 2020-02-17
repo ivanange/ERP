@@ -2,7 +2,7 @@
   <div
     class="main-container d-flex justify-content-center align-items-center flex-column custom-scroll"
   >
-    <b-form @submit.prevent="save" v-if="show" action="/commands" method="post">
+    <b-form @submit.prevent="save" v-if="show" action="/stock/commands" method="post">
       <h2 class="mb-3">Command</h2>
       <b-form-input
         id="name"
@@ -97,12 +97,12 @@
         ></b-form-input>
 
         <b-input-group-append>
-          <b-button variant="info" class="my-0 py-0" @click.stop="add">Add</b-button>
+          <b-button variant="dark" class="my-0 py-0" @click.stop="add">Add</b-button>
         </b-input-group-append>
       </b-input-group>
 
       <div class="d-flex justify-content-end mt-4 mb-1">
-        <b-button type="submit" class="mr-2" variant="info" style="min-width:70px;">Save</b-button>
+        <b-button type="submit" class="mr-2" variant="dark" style="min-width:70px;">Save</b-button>
       </div>
     </b-form>
   </div>
@@ -266,7 +266,7 @@ export default {
           if (this.loaded && !this.propCommand.id) {
             if (this.setupCommand()) {
             } else {
-              this.$router.push("/commands");
+              this.$router.push("/stock/commands");
             }
           }
         },

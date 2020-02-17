@@ -1,8 +1,32 @@
 <template>
   <div class="custom-scroll overflow-auto" style="max-height: 100%;">
+    <b-list-group v-if="this.categoriesList.length && this.listview">
+      <b-list-group-item class="d-flex justify-content-between align-items-center w-100">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="width: calc( 100% - 50px );"
+        >
+          <span class="font-weight-bold" style="width: 150px;">Name</span>
+          <span class="font-weight-bold mx-3" style="width: calc( 100% -  350px );">Decription</span>
+          <span class="font-weight-bold" style="width: 150px;">Link</span>
+        </div>
+        <span class="font-weight-bold">Actions</span>
+      </b-list-group-item>
+      <CategoryItem
+        v-for="category in this.categoriesList"
+        :category="category"
+        target="confirmDelete"
+        :key="category.id"
+        @confirm="confirm"
+        :style="listview ? '' : 'max-height:300px; width: 400px; overflow:hidden;'"
+        textstyle="max-height:100px; overflow:hidden;"
+        :class=" listview ? '' : 'my-3'"
+      />
+    </b-list-group>
+
     <b-card-group
       columns
-      v-if="this.categoriesList.length"
+      v-if="this.categoriesList.length && !this.listview"
       class="p-3 custom-scroll ovarflow-auto"
       style="max-height: 100%;"
     >

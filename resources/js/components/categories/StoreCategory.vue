@@ -2,7 +2,7 @@
   <div
     class="main-container d-flex justify-content-center align-items-center flex-column custom-scroll"
   >
-    <b-form @submit.prevent="save" v-if="show" action="/categories" method="post">
+    <b-form @submit.prevent="save" v-if="show" action="/stock/categories" method="post">
       <h2 class="mb-3">Category</h2>
 
       <b-form-group label="Name">
@@ -28,7 +28,7 @@
         ></b-form-textarea>
       </b-form-group>
       <div class="d-flex justify-content-end mt-4 mb-5">
-        <b-button type="submit" class="mr-2" variant="info" style="min-width:70px;">Save</b-button>
+        <b-button type="submit" class="mr-2" variant="dark" style="min-width:70px;">Save</b-button>
       </div>
     </b-form>
   </div>
@@ -88,7 +88,7 @@ export default {
           if (this.loaded && !this.propCategory.id) {
             if (this.setupCategory()) {
             } else {
-              this.$router.push("/categories");
+              this.$router.push("/stock/categories");
             }
           }
         },

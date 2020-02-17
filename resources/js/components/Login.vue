@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-center align-items-center bg-light flex-column h-100">
-    <h1 class="my-3 text-secondary display-3 w-auto mx-auto">PHARMA</h1>
+    <h1 class="my-3 text-secondary display-3 w-auto mx-auto">ERP</h1>
     <b-form @submit.prevent="Log">
       <b-form-group
         class="mx-auto"
@@ -13,7 +13,7 @@
           v-model="userlogin"
           type="text"
           required
-          placeholder="Login"
+          placeholder="Username"
           class="my-2"
           size="lg"
         ></b-form-input>
@@ -30,7 +30,7 @@
       </b-form-group>
 
       <div class="d-flex justify-content-center my-3">
-        <b-button type="submit" variant="info" style="min-width:70px;">Save</b-button>
+        <b-button type="submit" variant="dark" style="min-width:70px;">Save</b-button>
       </div>
     </b-form>
   </div>
@@ -68,7 +68,10 @@ export default {
   methods: {
     Log() {
       this.$http
-        .post("/api/login", { username: this.userlogin, password: this.userpass })
+        .post("/api/login", {
+          username: this.userlogin,
+          password: this.userpass
+        })
         .then(res => {
           if (res.ok) {
             this.$store.commit("setLogged", true);

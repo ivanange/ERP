@@ -1,10 +1,42 @@
 <template>
   <div>
+    <b-list-group-item
+      class="d-flex justify-content-between align-items-center w-100"
+      v-if="listview && !force"
+      :to="{ name:'ShowCommand', params: { propCommand: command, id: command.id } }"
+    >
+      <div
+        class="d-flex justify-content-between align-items-center"
+        style="width: calc( 100% - 50px );"
+      >
+        <span style="width: 20%;">{{this.command.name}}</span>
+        <span style="width: 20%;">{{this.issueDate}}</span>
+        <span style="width: 20%;">{{this.command.deliveryDate ? deliveryDate : "" }}</span>
+        <span style="width: 20%;">{{this.status.text}}</span>
+        <span style="width: 20%;">{{this.total}}</span>
+      </div>
+      <font-awesome-icon
+        class="d-inline-block"
+        style="cursor:pointer;"
+        size="lg"
+        icon="print"
+        title="print invoice"
+        @click.stop="print"
+      />
+      <font-awesome-icon
+        class="d-inline-block ml-4 text-muted font-weight-lighter"
+        icon="times"
+        size="lg"
+        style="cursor:pointer; "
+        @click.stop="$emit('confirm', command.id)"
+      />
+    </b-list-group-item>
     <b-card
       :id="command.id"
       :title="this.command.name"
       class="shadow-sm h-100"
       @click.stop.prevent="$router.push({ name:'ShowCommand', params: { propCommand: command, id: command.id } })"
+      v-else
     >
       <b-card-sub-title class="my-2">
         <small
@@ -44,11 +76,12 @@
           class="d-inline-block mr-auto mt-3 text-secondary"
           style="cursor:pointer;"
           icon="print"
+          title="print invoice"
           @click.stop="print"
         />
         <b-button
           :to="{ name:'EditCommand', params: { propCommand: this.command, id: this.command.id } }"
-          variant="info"
+          variant="dark"
           class="mr-2"
           style="min-width:70px;"
           @click.stop
@@ -78,6 +111,10 @@ export default {
     articleStyle: {
       type: String,
       default: ""
+    },
+    force: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -131,7 +168,7 @@ export default {
       printJS({
         printable: this.command.id,
         type: "html",
-        header: "PHARMA",
+        header: "ERP",
         headerStyle:
           "font-weight: 500; font-size: 24px; padding-bottom: 0px; margin-bottom: 7px; text-align: center;",
         scanStyles: true,

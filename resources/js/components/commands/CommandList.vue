@@ -1,8 +1,34 @@
 <template>
   <div class="custom-scroll overflow-auto" style="max-height: 100%;">
+    <b-list-group v-if="this.commandsList.length && this.listview">
+      <b-list-group-item class="d-flex justify-content-between align-items-center w-100">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="width: calc( 100% - 50px );"
+        >
+          <span class="font-weight-bold" style="width: 20%;">Name</span>
+          <span class="font-weight-bold" style="width: 20%;">Issue date</span>
+          <span class="font-weight-bold" style="width: 20%;">Delivery date</span>
+          <span class="font-weight-bold" style="width: 20%;">Status</span>
+          <span class="font-weight-bold" style="width: 20%;">Total</span>
+        </div>
+        <span class="font-weight-bold">Actions</span>
+      </b-list-group-item>
+      <CommandItem
+        v-for="command in this.commandsList"
+        articleStyle="max-height: 280px; overflow: auto;"
+        :command="command"
+        target="confirmDelete"
+        :key="command.id"
+        @confirm="confirm"
+        :style=" listview ? '' : 'max-height:600px; width: 400px;'"
+        :class="listview ? '' : 'my-3'"
+      />
+    </b-list-group>
+
     <b-card-group
       columns
-      v-if="this.commandsList.length"
+      v-if="this.commandsList.length && !this.listview"
       class="p-3 custom-scroll ovarflow-auto"
       style="max-height: 100%;"
     >
@@ -50,6 +76,10 @@ export default {
       type: Array,
       default: () => null,
       required: false
+    },
+    force: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {

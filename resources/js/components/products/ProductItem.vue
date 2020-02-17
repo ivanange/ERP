@@ -1,10 +1,40 @@
 <template>
   <div>
+    <b-list-group-item
+      class="d-flex justify-content-between align-items-center w-100"
+      v-if="listview && !force"
+      :to="{ name:'ShowProduct', params: { propProduct: product, id: product.id } }"
+    >
+      <div
+        class="d-flex justify-content-between align-items-center"
+        style="width: calc( 100% - 50px );"
+      >
+        <span style="width: 20%; ">{{this.product.name}}</span>
+        <span style="width: 10%;">{{this.price}}</span>
+        <span class="text-center" style="width: 10%;">{{this.product.qte}}</span>
+        <span style="width: 10%;">{{this.weight}}</span>
+        <span style="width: 10%;">{{this.status}}</span>
+        <span style="width: 20%;">{{this.product.manufacturer}}</span>
+        <span
+          class="text-center"
+          style="width: 20%;"
+        >{{this.product.category ? product.category.name : ''}}</span>
+      </div>
+      <font-awesome-icon
+        class="d-inline-block mr-4 text-muted font-weight-lighter"
+        icon="times"
+        size="lg"
+        style="cursor:pointer; "
+        @click.stop="$emit('confirm', product.id)"
+      />
+    </b-list-group-item>
+
     <b-card
       no-body
       :id="product.id"
       class="shadow-sm h-100"
       @click.stop.prevent="$router.push({ name:'ShowProduct', params: { propProduct: product, id: product.id } })"
+      v-else
     >
       <b-row no-gutters>
         <div
@@ -41,7 +71,7 @@
             <div class="ml-auto w-100 d-flex justify-content-end">
               <b-button
                 :to="{ name:'EditProduct', params: { propProduct: product, id: product.id } }"
-                variant="info"
+                variant="dark"
                 class="mr-2"
                 style="min-width:70px;"
                 @click.stop
@@ -67,6 +97,10 @@ export default {
     articleStyle: {
       type: String,
       default: ""
+    },
+    force: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -93,14 +127,17 @@ export default {
     },
 
     status: function() {
-      let expireDate = this.setupDate(this.product.expireDate);
-      let nearlyExpired = DateTime.utc();
-      nearlyExpired.plus(this.expiryInterval);
-      return expireDate <= DateTime.utc()
-        ? "Expired"
-        : expireDate <= nearlyExpired
-        ? "Nearly expired"
-        : "Good";
+      if (this.product.expireDate) {
+        let expireDate = this.setupDate(this.product.expireDate);
+        let nearlyExpired = DateTime.utc();
+        nearlyExpired.plus(this.expiryInterval);
+        return expireDate <= DateTime.utc()
+          ? "Expired"
+          : expireDate <= nearlyExpired
+          ? "Nearly expired"
+          : "Good";
+      }
+      return "";
     }
   }
 };

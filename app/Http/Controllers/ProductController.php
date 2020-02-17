@@ -116,25 +116,22 @@ class ProductController extends Controller
         return $request->json ?? false ? $product->toJson() : redirect('/products');
     }
 
-    public function massUpdate(Request $request, Product $product)
+    public function massUpdate(Request $request)
     {
-        $request->validate([
-            "name" => "required|string|max:500",
-            "manufacturer" => "required|string|max:500",
-            "weight" => "sometimes|numeric",
-            "price" => "required|numeric",
-            "qte" => "required|integer",
-            "expireDate" => "nullable|date",
-            "category_id" => "nullable|exists:categories,id"
+        $updatelist = $request->all();
 
-        ]);
+        foreach ($updatelist as $pid => $qte) {
+            //return response()->json(["test" => $pid]);
+            if ($pid !== "json") {
+                $int = (int) $qte;
+                if (!is_int($int ? $int : "a")) return response(422)->json(["massage" => "product with id $pid has invalid quantity $qte"]);
+                $product = Product::findOrFail($pid);
+                $product->qte += (int) $qte;
+                $product->save();
+            }
+        }
 
-        $product->fill($request->all());
-        $product->image = $this->createImageFromBase64($request);
-        $product->expireDate = date("Y-m-d H:i:s", strtotime($product->expireDate));
-        $product->save();
-
-        return $request->json ?? false ? $product->toJson() : redirect('/products');
+        return $request->json ?? false ? response()->json() : redirect('/products');
     }
 
 

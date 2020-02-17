@@ -15,19 +15,40 @@ use App\Http\Middleware\Json;
 */
 
 Route::middleware('json')->group(function () {
-    Auth::routes();
+    Auth::routes(['register' => false]);
+    Route::post("/products/update", "ProductController@massUpdate");
 });
 
 
-Route::get("/names", function () {
-    return App\User::all()->pluck("name")->toJson();
+Route::get("/names", "WorkerController@names");
+
+
+Route::middleware(['json', 'auth:web'])->group(function () {
+    Route::prefix('stock')->group(function () {
+        Route::apiResources([
+            'categories' => 'CategoryController',
+            'products' => 'ProductController',
+            'commands' => 'CommandController',
+        ]);
+    });
+
+    Route::prefix('accounting')->group(function () {
+        Route::apiResources([
+            'post' => 'PostController',
+            'departments' => 'DepartmentController',
+            'workers' => 'WorkerController',
+        ]);
+    });
+
+    Route::prefix('payroll')->group(function () {
+        Route::apiResources([
+            'flows' => 'FlowController',
+            'flowcategories' => 'FlowcategoryController',
+        ]);
+    });
 });
 
-Route::apiResources([
-    'categories' => 'CategoryController',
-    'products' => 'ProductController',
-    'commands' => 'CommandController',
-], ['middleware' => ["json", 'auth:web']]);
+
 
 /*
 Route::middleware(['json'])->group(function () {

@@ -26,13 +26,41 @@ Route::middleware('auth')->group(function () {
         return view('welcome');
     });
 
-    Route::get('/home', function () {
+    Route::get("/products/update", function () {
         return view('welcome');
     });
 
-    Route::resources([
-        'categories' => 'CategoryController',
-        'products' => 'ProductController',
-        'commands' => 'CommandController',
-    ]);
+    Route::get('/home', function () {
+        return view('welcome');
+    });
+    Route::get('/stock/stats', function () {
+        return view('welcome');
+    });
+
+    Route::get('/stock', function () {
+        return view('welcome');
+    });
+
+    Route::prefix('stock')->group(function () {
+        Route::apiResources([
+            'categories' => 'CategoryController',
+            'products' => 'ProductController',
+            'commands' => 'CommandController',
+        ]);
+    });
+
+    Route::prefix('accounting')->group(function () {
+        Route::apiResources([
+            'post' => 'PostController',
+            'departments' => 'DepartmentController',
+            'workers' => 'WorkerController',
+        ]);
+    });
+
+    Route::prefix('payroll')->group(function () {
+        Route::apiResources([
+            'flows' => 'FlowController',
+            'flowcategories' => 'FlowcategoryController',
+        ]);
+    });
 });

@@ -29,19 +29,19 @@ hr {
 
 .custom-radio .custom-control-input:checked ~ .custom-control-label::before,
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
-  background-color: var(--info);
-  border-color: var(--info);
+  background-color: var(--dark);
+  border-color: var(--dark);
   border-radius: 50%;
 }
 
 html body .vdatetime-calendar__month__day--selected > span > span,
 html body .vdatetime-calendar__month__day--selected:hover > span > span {
   color: #fff;
-  background: var(--info);
+  background: var(--dark);
 }
 
 html body .vdatetime-popup__header {
-  background: var(--info);
+  background: var(--dark);
 }
 
 html body .vdatetime-popup__header,
@@ -51,6 +51,6 @@ html body .vdatetime-popup__header .vdatetime-popup {
 
 html body .vdatetime-time-picker__item--selected,
 html body .vdatetime-popup__actions__button {
-  color: var(--info);
+  color: var(--dark);
 }
 

@@ -82,4 +82,9 @@ class WorkerController extends Controller
     {
         //
     }
+
+    public function names()
+    {
+        return Worker::all()->pluck("username")->toJson();
+    }
 }

@@ -1,4 +1,4 @@
-require('es7-object-polyfill');
+//require('es7-object-polyfill');
 import {
     mapState,
     mapGetters,
@@ -6,40 +6,58 @@ import {
 } from 'vuex';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
+import Vuex from 'vuex';
+import VuexPersist from 'vuex-persist';
 import {
     DateTime,
-    Duration
+    Duration,
+    Settings
 } from 'luxon';
 
 // change date to use local with method .setLocale('en-GB') remove update locale and luxonSettings
 
 Vue.use(VueResource);
+Vue.use(Vuex);
+
+// setup global config
+Vue.config.productionTip = false;
+Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+Vue.http.headers.common['Accept'] = 'application/json';
+Vue.http.headers.common['Content-Type'] = 'application/json';
+Settings.defaultLocale = "en";
+
 
 const expired = (state, product) => {
-    let now = DateTime.utc();
-    let expireDate = DateTime.fromFormat(
-        product.expireDate,
-        "yyyy-MM-dd HH:mm:ss", {
-            zone: "UTC"
-        }
-    );
-    return expireDate <= now
+    if (product.expireDate) {
+        let now = DateTime.utc();
+        let expireDate = DateTime.fromFormat(
+            product.expireDate,
+            "yyyy-MM-dd HH:mm:ss", {
+                zone: "UTC"
+            }
+        );
+        return expireDate <= now
+    }
+    return false;
 }
 
 const nearlyExpired = (state, product) => {
-    let now = DateTime.utc();
-    let interval = Duration.fromObject(state.expiryInterval);
-    let expireDate = DateTime.fromFormat(
-        product.expireDate,
-        "yyyy-MM-dd HH:mm:ss", {
-            zone: "UTC"
-        }
-    );
-    now.plus(interval);
-    return expireDate <= now;
+    if (product.expireDate) {
+        let now = DateTime.utc();
+        let interval = Duration.fromObject(state.expiryInterval);
+        let expireDate = DateTime.fromFormat(
+            product.expireDate,
+            "yyyy-MM-dd HH:mm:ss", {
+                zone: "UTC"
+            }
+        );
+        now.plus(interval);
+        return expireDate <= now;
+    }
+    return false;
 }
 
-export const state = {
+const state = {
     state: {
         lang: "en",
         currency: "XAF",
@@ -69,21 +87,22 @@ export const state = {
     getters: {
         STATUS: state => state[state.lang.toUpperCase() + "STATUS"],
         manufacturers: (state, getters) => [...(new Set(getters.productList.map(el => el.manufacturer)))],
-        //commands
+        //stock/commands
         commandList: state => Object.values(state.commands),
         getCommand: state => (id) => state.commands[id],
         getCommandByStatus: (state, getters) => (status) => getters.commandList.filter(el => el.status == status),
         deliveredCommands: (state, getters) => getters.getCommandByStatus(state.ENSTATUS.DELIVERED),
         ongoingCommands: (state, getters) => getters.getCommandByStatus(state.ENSTATUS.ONGOING),
         abortedCommands: (state, getters) => getters.getCommandByStatus(state.ENSTATUS.ABORTED),
-        //products
+        //stock/products
         productList: state => Object.values(state.products),
         availableProductsList: (state, getters) => getters.productList.filter(product => product.qte > 0),
         getProduct: state => (id) => state.products[id],
         expiredProducts: (state, getters) => getters.productList.filter(product => expired(state, product)),
         nearlyExpiredProducts: (state, getters) => getters.productList.filter(product => nearlyExpired(state, product) && !expired(state, product)),
+        finishedProducts: (state, getters) => getters.productList.filter(product => product.qte == 0),
         goodProducts: (state, getters) => getters.productList.filter(product => !(nearlyExpired(state, product) || expired(state, product))),
-        //categories
+        //stock/categories
         categoryList: state => Object.values(state.categories),
         getCategory: state => (id) => state.categories[id],
     },
@@ -146,6 +165,12 @@ export const state = {
             Vue.delete(state.products, id);
         },
 
+        updateProductsQuantity(state, products) {
+            Object.keys(products).forEach((id) => {
+                Vue.set(state.products[id], 'qte', products[id]);
+            });
+        },
+
         //Category
 
         addCategories(state, categories) {
@@ -183,7 +208,7 @@ export const state = {
         // Commands
 
         fetchCommands(context) {
-            Vue.http.get('/api/commands').then(res => {
+            Vue.http.get('/api/stock/commands').then(res => {
                 if (res.ok) {
                     context.commit("addCommands", res.body.reduce((acc, val) => {
                         acc[val.id] = val;
@@ -198,7 +223,7 @@ export const state = {
             });
         },
         createCommand(context, command) {
-            Vue.http.post('/api/commands', command).then(res => {
+            Vue.http.post('/api/stock/commands', command).then(res => {
                 if (res.ok) {
                     context.commit("changeCommand", res.body);
                 } else {
@@ -209,7 +234,7 @@ export const state = {
             });
         },
         updateCommand(context, command) {
-            Vue.http.put(`/api/commands/${command.id}`, command).then(res => {
+            Vue.http.put(`/api/stock/commands/${command.id}`, command).then(res => {
                 if (res.ok) {
                     context.commit("changeCommand", res.body);
                 } else {
@@ -220,7 +245,7 @@ export const state = {
             });
         },
         destroyCommand(context, id) {
-            Vue.http.delete(`/api/commands/${id}`).then(res => {
+            Vue.http.delete(`/api/stock/commands/${id}`).then(res => {
                 if (res.ok) {
                     context.commit("deleteCommand", id);
                 } else {
@@ -234,7 +259,7 @@ export const state = {
         // Products
 
         fetchProducts(context) {
-            Vue.http.get('/api/products').then(res => {
+            Vue.http.get('/api/stock/products').then(res => {
                 if (res.ok) {
                     context.commit("addProducts", res.body.reduce((acc, val) => {
                         acc[val.id] = val;
@@ -249,7 +274,7 @@ export const state = {
             });
         },
         createProduct(context, product) {
-            Vue.http.post('/api/products', {
+            Vue.http.post('/api/stock/products', {
                 ...product,
                 image: product.image ? product.image.replace(
                     /data:.*?base64,/,
@@ -266,7 +291,7 @@ export const state = {
             });
         },
         updateProduct(context, product) {
-            Vue.http.put(`/api/products/${product.id}`, {
+            Vue.http.put(`/api/stock/products/${product.id}`, {
                 ...product,
                 image: product.image ? product.image.replace(
                     /data:.*?\/.*?;base64,/,
@@ -283,9 +308,21 @@ export const state = {
             });
         },
         destroyProduct(context, id) {
-            Vue.http.delete(`/api/products/${id}`).then(res => {
+            Vue.http.delete(`/api/stock/products/${id}`).then(res => {
                 if (res.ok) {
                     context.commit("deleteProduct", id);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+
+        massUpdate(context, products) {
+            Vue.http.post(`/api/stock/products/update`, products).then(res => {
+                if (res.ok) {
+                    context.commit("updateProductsQuantity", products);
                 } else {
                     // manage small quirks auth, validation, etc
                 }
@@ -297,7 +334,7 @@ export const state = {
         //Category
 
         fetchCategories(context) {
-            Vue.http.get('/api/categories').then(res => {
+            Vue.http.get('/api/stock/categories').then(res => {
                 if (res.ok) {
                     context.commit("addCategories", res.body.reduce((acc, val) => {
                         acc[val.id] = val;
@@ -312,7 +349,7 @@ export const state = {
             });
         },
         createCategory(context, category) {
-            Vue.http.post('/api/categories', category).then(res => {
+            Vue.http.post('/api/stock/categories', category).then(res => {
                 if (res.ok) {
                     context.commit("changeCategory", res.body);
                 } else {
@@ -323,7 +360,7 @@ export const state = {
             });
         },
         updateCategory(context, category) {
-            Vue.http.put(`/api/categories/${category.id}`, category).then(res => {
+            Vue.http.put(`/api/stock/categories/${category.id}`, category).then(res => {
                 if (res.ok) {
                     context.commit("changeCategory", res.body);
                 } else {
@@ -334,7 +371,7 @@ export const state = {
             });
         },
         destroyCategory(context, id) {
-            Vue.http.delete(`/api/categories/${id}`).then(res => {
+            Vue.http.delete(`/api/stock/categories/${id}`).then(res => {
                 if (res.ok) {
                     context.commit("deleteCategory", id);
                 } else {
@@ -347,7 +384,7 @@ export const state = {
     }
 };
 
-export const stateMap = {
+const stateMap = {
     ...mapState([
         "lang",
         "loaded",
@@ -386,6 +423,7 @@ export const stateMap = {
         "getProduct",
         "expiredProducts",
         "nearlyExpiredProducts",
+        "finishedProducts",
         "goodProducts",
 
         // Categories
@@ -396,7 +434,7 @@ export const stateMap = {
 
 }
 
-export const actions = mapActions([
+const actions = mapActions([
     "fetchNames",
 
     // Commands
@@ -412,6 +450,7 @@ export const actions = mapActions([
     "createProduct",
     "updateProduct",
     "destroyProduct",
+    "massUpdate",
 
     // Categories
 
@@ -420,3 +459,30 @@ export const actions = mapActions([
     "updateCategory",
     "destroyCategory"
 ]);
+
+
+
+// setup global data and methods
+Vue.mixin({
+    computed: {
+        ...stateMap,
+    },
+
+    methods: {
+        ...actions,
+    },
+});
+
+
+const vuexLocalStorage = new VuexPersist({
+    key: 'vuex',
+    storage: window.localStorage,
+})
+const store = new Vuex.Store({
+    ...state,
+    plugins: [vuexLocalStorage.plugin],
+});
+
+
+
+export default store;
