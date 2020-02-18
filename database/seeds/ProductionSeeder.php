@@ -66,14 +66,16 @@ class ProductionSeeder extends Seeder
 
         //create admin worker
 
-        factory(App\Worker::class, 10)->create([
-            "name" => "admin",
-            "email" => "admin@email.com",
-            "gender" => "Male",
-            "username" => "admin",
-            "address" => "admin",
-            "password" => bcrypt('admin'),
-            "post_id" => factory(App\Post::class)->create()->id
-        ]);
+        App\Worker::updateOrCreate(
+            ["name" => "admin"],
+            [
+                "email" => "admin@email.com",
+                "gender" => "Male",
+                "username" => "admin",
+                "address" => "admin",
+                "password" => bcrypt('admin'),
+                "post_id" => factory(App\Post::class)->create()->id
+            ]
+        );
     }
 }

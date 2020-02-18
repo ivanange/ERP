@@ -18,7 +18,7 @@ class Worker extends Authenticatable
     ];
     public $timestamps = false;
     protected $hidden = [
-        'password', 'remember_token',
+        // 'password', 'remember_token',
     ];
 
     public function post()
