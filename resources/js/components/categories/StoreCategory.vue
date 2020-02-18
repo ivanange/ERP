@@ -42,6 +42,10 @@ export default {
       type: Number | String,
       default: null
     },
+    categoryType: {
+      type: String,
+      default: "Category"
+    },
     propCategory: {
       type: Object,
       default: function() {
@@ -96,7 +100,7 @@ export default {
       );
       this.setupCategory();
     }
-    this.action = (this.edit ? "update" : "create") + "Category";
+    this.action = (this.edit ? "update" : "create") + this.categoryType;
   }
 };
 </script>

@@ -74,6 +74,18 @@ export default {
             .indexOf(this.filters.name.toLowerCase()) !== -1
       );
     }
+  },
+  created: function() {
+    this.$store.watch(
+      (state, getters) => getters.categoryList,
+      () => {
+        this.update();
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    );
   }
 };
 </script>

@@ -381,6 +381,19 @@ const state = {
                 // catch fatal errors
             });
         },
+
+        logout(context) {
+            Vue.http.post('/api/logout').then(res => {
+                if (res.ok) {
+                    context.commit("setLogged", false);
+                    window.location = "/";
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        }
     }
 };
 
@@ -436,6 +449,7 @@ const stateMap = {
 
 const actions = mapActions([
     "fetchNames",
+    "logout",
 
     // Commands
 

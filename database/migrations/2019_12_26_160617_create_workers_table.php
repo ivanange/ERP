@@ -22,7 +22,7 @@ class CreateWorkersTable extends Migration
             $table->string('email', 100)->nullable();
             $table->string('title', 50)->default('MR');
             $table->enum('gender', ['Male', 'Female']);
-            $table->string('username', 100);
+            $table->string('username', 100)->unique();
             $table->string('address', 200);
             $table->string('password', 500);
             $table->unsignedBigInteger('permissions')->default(0);

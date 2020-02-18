@@ -63,7 +63,7 @@ class ProductController extends Controller
         $product->expireDate = date("Y-m-d H:i:s", strtotime($product->expireDate));
         $product->save();
 
-        return $request->json ?? false ? $product->toJson() : redirect('/products');
+        return $request->json ?? false ? $product->toJson() : redirect('/stock/products');
     }
 
     /**
@@ -74,7 +74,7 @@ class ProductController extends Controller
      */
     public function show(Product $product, Request $request)
     {
-        return $request->json ?? false ? $product->toJson() : view('products.show', ["product" => $product]);
+        return $request->json ?? false ? $product->load('category')->toJson() : view('products.show', ["product" => $product]);
     }
 
     /**
@@ -113,7 +113,7 @@ class ProductController extends Controller
         $product->expireDate = date("Y-m-d H:i:s", strtotime($product->expireDate));
         $product->save();
 
-        return $request->json ?? false ? $product->toJson() : redirect('/products');
+        return $request->json ?? false ? $product->toJson() : redirect('/stock/products');
     }
 
     public function massUpdate(Request $request)
@@ -131,7 +131,7 @@ class ProductController extends Controller
             }
         }
 
-        return $request->json ?? false ? response()->json() : redirect('/products');
+        return $request->json ?? false ? response()->json() : redirect('/stock/products');
     }
 
 
@@ -144,7 +144,7 @@ class ProductController extends Controller
     public function destroy(Product $product, Request $request)
     {
         $product->delete();
-        return $request->json ?? false ? response()->json() : redirect('/products');
+        return $request->json ?? false ? response()->json() : redirect('/stock/products');
     }
 
     public function createImageFromBase64(Request $request)

@@ -9,6 +9,15 @@
         <b-nav-item :href="'/accounting'">Acounting</b-nav-item>
         <b-nav-item :href="'/payroll'">Payroll</b-nav-item>
       </b-navbar-nav>
+      <font-awesome-icon
+        class="ml-auto mr-3 text-white"
+        icon="sign-out-alt"
+        size="lg"
+        style="cursor:pointer; "
+        title="logout"
+        v-if="this.logged"
+        @click.stop="logout"
+      />
     </b-navbar>
   </div>
 </template>

@@ -51,7 +51,7 @@ class CommandController extends Controller
         $command->issueDate =  $issueDate;
         $command->save();
         $command->products()->sync((array) $request->articles ?? []);
-        return $request->json ?? false ? $command->load('products')->toJson() : redirect('/commands');
+        return $request->json ?? false ? $command->load('products')->toJson() : redirect('/stock/commands');
     }
 
     /**
@@ -94,7 +94,7 @@ class CommandController extends Controller
         $command->fill($request->all());
         $command->save();
         $command->products()->sync((array) $request->articles ?? []);
-        return $request->json ?? false ? $command->load('products')->toJson() : redirect('/commands');
+        return $request->json ?? false ? $command->load('products')->toJson() : redirect('/stock/commands');
     }
 
     /**
@@ -106,7 +106,7 @@ class CommandController extends Controller
     public function destroy(Request $request, Command $command)
     {
         $command->delete();
-        return $request->json ?? false ? response()->json() : redirect('/commands');
+        return $request->json ?? false ? response()->json() : redirect('/stock/commands');
     }
 
     /**
@@ -130,7 +130,7 @@ class CommandController extends Controller
     public function restore(Request $request)
     {
         $restored = Command::onlyTrashed()->whereIn('id', $request->recycle)->restore();
-        return $request->json ?? false ? response()->json(["restored" => $restored ? "Ok" : "Error"]) : redirect('/commands');
+        return $request->json ?? false ? response()->json(["restored" => $restored ? "Ok" : "Error"]) : redirect('/stock/commands');
     }
 
     /**
@@ -142,6 +142,6 @@ class CommandController extends Controller
     public function delete(Request $request)
     {
         $deleted = Command::onlyTrashed()->whereIn('id', $request->recycle)->forceDelete();
-        return $request->json ?? false ? response()->json(["deleted" => $deleted ? "OK" : "Error"]) : redirect('/commands');
+        return $request->json ?? false ? response()->json(["deleted" => $deleted ? "OK" : "Error"]) : redirect('/stock/commands');
     }
 }

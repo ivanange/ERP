@@ -160,6 +160,18 @@ export default {
             : true)
       );
     }
+  },
+  created: function() {
+    this.$store.watch(
+      (state, getters) => getters.commandList,
+      () => {
+        this.update();
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    );
   }
 };
 </script>

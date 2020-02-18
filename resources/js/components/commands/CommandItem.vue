@@ -3,7 +3,7 @@
     <b-list-group-item
       class="d-flex justify-content-between align-items-center w-100"
       v-if="listview && !force"
-      :to="{ name:'ShowCommand', params: { propCommand: command, id: command.id } }"
+      @click.stop="$router.push({ name:'ShowCommand', params: { propCommand: command, id: command.id } })"
     >
       <div
         class="d-flex justify-content-between align-items-center"

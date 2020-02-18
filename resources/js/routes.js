@@ -47,7 +47,6 @@ const routes = [{
     },
     {
         path: '/stock',
-        name: 'Stock',
         component: Stock,
         children: [{
                 path: 'stats',
@@ -143,7 +142,6 @@ const routes = [{
             },
             {
                 path: '',
-                name: 'StockHome',
                 component: StockHome,
                 props: true
             },

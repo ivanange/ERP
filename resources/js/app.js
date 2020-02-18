@@ -20,6 +20,7 @@ import {
     faThList,
     faThLarge,
     faTimes,
+    faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faWpforms
@@ -52,7 +53,8 @@ library.add(
     faLongArrowAltUp,
     faThList,
     faThLarge,
-    faTimes
+    faTimes,
+    faSignOutAlt,
 );
 
 // setup vue plugins and components
@@ -164,6 +166,5 @@ const vm = new Vue({
                 deep: true
             }
         );
-
     }
 });

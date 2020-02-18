@@ -54,7 +54,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return $request->json ?? false ? $category->toJson() : redirect('/categories');
+        return $request->json ?? false ? $category->toJson() : redirect('/stock/categories');
     }
 
     /**
@@ -96,7 +96,7 @@ class CategoryController extends Controller
         $category->fill($request->all());
         $category->save();
 
-        return $request->json ?? false ? $category->toJson() : redirect('/categories');
+        return $request->json ?? false ? $category->toJson() : redirect('/stock/categories');
     }
 
     /**
@@ -108,6 +108,6 @@ class CategoryController extends Controller
     public function destroy(Category $category, Request $request)
     {
         $category->delete();
-        return $request->json ?? false ? response()->json() : redirect('/categories');
+        return $request->json ?? false ? response()->json() : redirect('/stock/categories');
     }
 }

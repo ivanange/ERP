@@ -7,7 +7,7 @@
         <b-nav-item :to="'/stock'">Home</b-nav-item>
         <b-nav-item :to="'/stock/categories'">Categories</b-nav-item>
         <b-nav-item :to="'/stock/commands'">Commands</b-nav-item>
-        <b-nav-item-dropdown text="Products" v-if="categoryList.length">
+        <b-nav-item-dropdown text="Products" v-if="categoryList.length" class="custom-scroll">
           <b-dropdown-item :to="'/stock/products'">All</b-dropdown-item>
           <b-dropdown-item
             v-for="category in categoryList"

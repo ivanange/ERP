@@ -146,7 +146,11 @@ export default {
       let searchList =
         !this.filters.status.length || this.filters.status.length == 3
           ? this.productList
-          : [].concat(...this.filters.status.map(el => this[el + "Products"]));
+          : this.productList.filter(e =>
+              []
+                .concat(...this.filters.status.map(el => this[el + "Products"]))
+                .find(a => a.id == e.id)
+            );
 
       return searchList.filter(
         product =>
@@ -167,6 +171,18 @@ export default {
             : true)
       );
     }
+  },
+  created: function() {
+    this.$store.watch(
+      (state, getters) => getters.productList,
+      () => {
+        this.update();
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    );
   }
 };
 </script>
