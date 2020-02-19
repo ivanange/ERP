@@ -37,7 +37,7 @@
           required
         ></b-form-radio-group>
       </b-form-group>
-      <div class="mt-2">
+      <div class="d-flex $mt-2">
         <h5 class="w-100 mb-2">Frequency</h5>
         <b-form-group label="Years" class="mx-2">
           <b-form-input

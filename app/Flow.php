@@ -28,10 +28,11 @@ class Flow extends Model
 
     public function updateDues()
     {
-        if ($this->amount and $this->frequency) {
+        if (!is_null($this->amount) && !is_null($this->frequency)) {
             $dues = [];
-            $lastDueDate = $this->dues()->latest()->first()->created_at;
             $now = time();
+            $lastDueDate = $this->dues()->latest()->first()->created_at ?? gmdate('Y-m-d H:i:s', $now);
+
             while ($now >= ($lastDueDate = strtotime($this->frequency, strtotime($lastDueDate . ' utc')))) {
                 $lastDueDate = (new DateTime("now", new DateTimeZone('UTC')))
                     ->setTimestamp($lastDueDate)

@@ -7,7 +7,7 @@
           v-for="name in Object.keys(stats.in)"
           :key="name"
           class="lead my-3"
-        >{{name}} : {{stats.in[name]}} {{currency}}</span>
+        >{{name}} : {{stats.in[name].toFixed(2)}} {{currency}}</span>
       </div>
     </div>
     <div class="out w-50">
@@ -17,10 +17,10 @@
           v-for="name in Object.keys(stats.out)"
           :key="name"
           class="lead my-3"
-        >{{name}} : {{stats.out[name]}} {{currency}}</span>
+        >{{name}} : {{stats.out[name].toFixed(2)}} {{currency}}</span>
       </div>
     </div>
-    <h2 class="display-2">Benefit : {{stats.benefit}}</h2>
+    <h2 class="display-4 text-center w-100">Benefit : {{stats.benefit.toFixed(2)}} {{currency}}</h2>
   </div>
 </template>
 
@@ -41,18 +41,18 @@ export default {
     stats() {
       let stats = {
         in: {
-          Sales: this.totalSales,
-          Total: 0
+          Total: 0,
+          Sales: this.totalSales
         },
         out: {
-          Salaries: this.totalSalary,
-          Total: 0
+          Total: 0,
+          Salaries: this.totalSalary
         },
         benefit: 0
       };
       Object.values(this.$store.state.flows).forEach(flow => {
         let totalDue = flow.dues.reduce(
-          (total, due) => (total += due.amount),
+          (total, due) => (total += parseFloat(due.amount)),
           0
         );
         let cat = flow.type == 1 ? "in" : "out";
