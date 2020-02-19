@@ -73,7 +73,7 @@ export default {
     },
     setupCategory() {
       if (!this.setup) {
-        let category = this.getCategory(this.id);
+        let category = this["get" + this.categoryType](this.id);
         if (category) {
           this.category = category || this.category;
           this.setup = true;
@@ -92,7 +92,9 @@ export default {
           if (this.loaded && !this.propCategory.id) {
             if (this.setupCategory()) {
             } else {
-              this.$router.push("/stock/categories");
+              this.$router.push(
+                "/stock/" + this.categoryType.toLowerCase().replace("y", "ies")
+              );
             }
           }
         },

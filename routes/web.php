@@ -26,22 +26,24 @@ Route::middleware('auth')->group(function () {
         return view('welcome');
     });
 
-    Route::get("/products/update", function () {
-        return view('welcome');
-    });
-
     Route::get('/home', function () {
         return view('welcome');
     });
-    Route::get('/stock/stats', function () {
-        return view('welcome');
-    });
 
-    Route::get('/stock', function () {
-        return view('welcome');
-    });
 
     Route::prefix('stock')->group(function () {
+        Route::get('', function () {
+            return view('welcome');
+        });
+
+        Route::get("/products/update", function () {
+            return view('welcome');
+        });
+
+        Route::get('/stats', function () {
+            return view('welcome');
+        });
+
         Route::apiResources([
             'categories' => 'CategoryController',
             'products' => 'ProductController',
@@ -49,7 +51,7 @@ Route::middleware('auth')->group(function () {
         ]);
     });
 
-    Route::prefix('accounting')->group(function () {
+    Route::prefix('payroll')->group(function () {
         Route::apiResources([
             'post' => 'PostController',
             'departments' => 'DepartmentController',
@@ -57,7 +59,13 @@ Route::middleware('auth')->group(function () {
         ]);
     });
 
-    Route::prefix('payroll')->group(function () {
+    Route::prefix('accounting')->group(function () {
+        Route::get('', function () {
+            return view('welcome');
+        });
+        Route::get('/stats', function () {
+            return view('welcome');
+        });
         Route::apiResources([
             'flows' => 'FlowController',
             'flowcategories' => 'FlowcategoryController',

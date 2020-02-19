@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Flow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FlowController extends Controller
 {
     public function __construct()
     {
-        Flow::all()->each(function ($flow) {
+        Flow::whereNotNull('amount')->whereNotNull('frequency')->get()->each(function ($flow) {
             $flow->updateDues();
         });
     }
@@ -21,7 +22,7 @@ class FlowController extends Controller
     public function index(Request $request)
     {
         $data = array(); /* va contenir les donnees de la table catégories dans la base*/
-        $flows = Flow::with("category")->get(); /*va aller recuperer les donnees de la table flows de la base*/
+        $flows = Flow::with(["category", "dues"])->get(); /*va aller recuperer les donnees de la table flows de la base*/
         $data["flows"] = $flows; /* contient les informations qu'on est allées chercher  */
 
         return $request->json ?? false ? $flows->toJson() : view('flows.index', $data); /*on affiche toutes les flows dans la page index*/
@@ -49,7 +50,7 @@ class FlowController extends Controller
             "name" => "required|string|max:200",
             "desc" => "nullable|string|max:500",
             'type' => 'required|in:' . Flow::ENTRER . ',' . Flow::SORTIE,
-            'frequency' => 'nullable|string|date',
+            'frequency' => 'nullable|string',
             "amount" => "required_if:frequency,null|numeric",
             'category_id' => 'sometimes|integer|exists:categories,id'
         ]);
@@ -77,7 +78,7 @@ class FlowController extends Controller
      */
     public function show(Flow $flow, Request $request)
     {
-        return $request->json ?? false ? $flow->load('category')->toJson() : view('flows.show', ["flow" => $flow]);
+        return $request->json ?? false ? $flow->load(['category', 'dues'])->toJson() : view('flows.show', ["flow" => $flow]);
     }
 
     /**
@@ -104,7 +105,7 @@ class FlowController extends Controller
             "name" => "nullable|string|max:200",
             "desc" => "nullable|string|max:500",
             'type' => 'sometimes|in:' . Flow::ENTRER . ',' . Flow::SORTIE,
-            'frequency' => 'nullable|string|date',
+            'frequency' => 'nullable|string',
             "amount" => "sometimes|numeric",
             'category_id' => 'sometimes|integer|exists:categories,id'
         ]);
@@ -129,5 +130,11 @@ class FlowController extends Controller
     {
         $flow->delete();
         return $request->json ?? false ? response()->json() : redirect('/accounting/flows');
+    }
+
+    public function total()
+    {
+        $totalSalary = DB::table('workers')->join('posts', 'workers.post_id', '=', 'posts.id')->sum('baseSalary');
+        return response()->json(['total' => $totalSalary]);
     }
 }

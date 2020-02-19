@@ -37,7 +37,7 @@ import 'vue-datetime/dist/vue-datetime.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-import router from './routes';
+import router from './router';
 import store from './store';
 
 import Navbar from "./components/Navbar";
@@ -160,6 +160,9 @@ const vm = new Vue({
                     this.fetchCommands();
                     this.fetchProducts();
                     this.fetchCategories();
+                    this.fetchFlowCategories();
+                    this.fetchFlows();
+                    this.getTotalSalary();
                 }
             }, {
                 immediate: true,

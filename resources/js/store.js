@@ -66,6 +66,7 @@ const state = {
         loaded: false,
         logged: false,
         loadCounter: 0,
+        totalSalary: 0,
         expiryInterval: {
             days: 30
         },
@@ -82,6 +83,8 @@ const state = {
         commands: {},
         categories: {},
         products: {},
+        flows: {},
+        flowcategories: {},
 
     },
     getters: {
@@ -105,10 +108,21 @@ const state = {
         //stock/categories
         categoryList: state => Object.values(state.categories),
         getCategory: state => (id) => state.categories[id],
+        // flowcategories
+        flowcategoryList: state => Object.values(state.flowcategories),
+        getFlowCategory: state => (id) => state.flowcategories[id],
+        //flows
+        getFlow: state => (id) => state.flows[id],
+        flowList: state => Object.values(state.flows),
+        inFlowsList: (state, getters) => getters.flowList.filter(flow => flow.type == 1),
+        outFlowsList: (state, getters) => getters.flowList.filter(flow => flow.type == 2),
     },
     mutations: {
         setLogged(state, logged) {
             state.logged = logged;
+        },
+        setTotal(state, total) {
+            state.totalSalary = total;
         },
         setNames(state, names) {
             state.names = names;
@@ -121,7 +135,7 @@ const state = {
         },
         loadCheck(state) {
             state.loadCounter++
-            if (state.loadCounter == 3) {
+            if (state.loadCounter == 5) {
                 state.loaded = true;
                 state.loadCounter = 0;
             }
@@ -187,6 +201,42 @@ const state = {
         },
         deleteCategory(state, id) {
             Vue.delete(state.categories, id);
+        },
+
+        // Flow Category
+
+        addFlowCategories(state, categories) {
+            state.flowcategories = categories;
+        },
+        changeFlowCategory(state, category) {
+            Vue.set(state.flowcategories, category.id, category);
+        },
+        addFlowCategory(state, category) {
+            state.commit('changeFlowCategory', category);
+        },
+        editFlowCategory(state, category) {
+            state.commit('changeFlowCategory', category);
+        },
+        deleteFlowCategory(state, id) {
+            Vue.delete(state.flowcategories, id);
+        },
+
+        // Flow
+
+        addFlows(state, flows) {
+            state.flows = flows;
+        },
+        changeFlow(state, flow) {
+            Vue.set(state.flows, flow.id, flow);
+        },
+        addFlow(state, flow) {
+            state.commit('changeFlow', flow);
+        },
+        editFlow(state, flow) {
+            state.commit('changeFlow', flow);
+        },
+        deleteFlow(state, id) {
+            Vue.delete(state.flows, id);
         },
 
     },
@@ -382,6 +432,121 @@ const state = {
             });
         },
 
+        // Flow Category
+
+        fetchFlowCategories(context) {
+            Vue.http.get('/api/accounting/flowcategories').then(res => {
+                if (res.ok) {
+                    context.commit("addFlowCategories", res.body.reduce((acc, val) => {
+                        acc[val.id] = val;
+                        return acc;
+                    }, {}));
+                    context.commit("loadCheck");
+                } else {
+                    // manage small quirks uath, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        createFlowCategory(context, category) {
+            Vue.http.post('/api/accounting/flowcategories', category).then(res => {
+                if (res.ok) {
+                    context.commit("changeFlowCategory", res.body);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        updateFlowCategory(context, category) {
+            Vue.http.put(`/api/accounting/flowcategories/${category.id}`, category).then(res => {
+                if (res.ok) {
+                    context.commit("changeFlowCategory", res.body);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        destroyFlowCategory(context, id) {
+            Vue.http.delete(`/api/accounting/flowcategories/${id}`).then(res => {
+                if (res.ok) {
+                    context.commit("deleteFlowCategory", id);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+
+        // Flow
+
+        fetchFlows(context) {
+            Vue.http.get('/api/accounting/flows').then(res => {
+                if (res.ok) {
+                    context.commit("addFlows", res.body.reduce((acc, val) => {
+                        acc[val.id] = val;
+                        return acc;
+                    }, {}));
+                    context.commit("loadCheck");
+                } else {
+                    // manage small quirks uath, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        createFlow(context, flow) {
+            Vue.http.post('/api/accounting/flows', flow).then(res => {
+                if (res.ok) {
+                    context.commit("changeFlow", res.body);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        updateFlow(context, flow) {
+            Vue.http.put(`/api/accounting/flows/${flow.id}`, flow).then(res => {
+                if (res.ok) {
+                    context.commit("changeFlow", res.body);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+        destroyFlow(context, id) {
+            Vue.http.delete(`/api/accounting/flows/${id}`).then(res => {
+                if (res.ok) {
+                    context.commit("deleteFlow", id);
+                } else {
+                    // manage small quirks auth, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+
+        getTotalSalary(context) {
+            Vue.http.get('/api/accounting/total').then(res => {
+                if (res.ok) {
+                    context.commit("setTotal", res.body.total);
+                } else {
+                    // manage small quirks uath, validation, etc
+                }
+            }).catch(error => {
+                // catch fatal errors
+            });
+        },
+
+
         logout(context) {
             Vue.http.post('/api/logout').then(res => {
                 if (res.ok) {
@@ -400,6 +565,7 @@ const state = {
 const stateMap = {
     ...mapState([
         "lang",
+        "totalSalary",
         "loaded",
         "logged",
         "currency",
@@ -443,6 +609,18 @@ const stateMap = {
 
         "categoryList",
         "getCategory",
+
+        // Flow Categories
+
+        "flowcategoryList",
+        "getFlowCategory",
+
+        // Flows
+
+        "getFlow",
+        "flowList",
+        "inFlowsList",
+        "outFlowsList"
     ]),
 
 }
@@ -450,6 +628,7 @@ const stateMap = {
 const actions = mapActions([
     "fetchNames",
     "logout",
+    "getTotalSalary",
 
     // Commands
 
@@ -471,7 +650,21 @@ const actions = mapActions([
     "fetchCategories",
     "createCategory",
     "updateCategory",
-    "destroyCategory"
+    "destroyCategory",
+
+    // Flow Categories
+
+    "fetchFlowCategories",
+    "createFlowCategory",
+    "updateFlowCategory",
+    "destroyFlowCategory",
+
+    // Flow Categories
+
+    "fetchFlows",
+    "createFlow",
+    "updateFlow",
+    "destroyFlow"
 ]);
 
 

@@ -47,66 +47,66 @@ class FlowCategoryController extends Controller
         /*on crée une nouvelle catégorie dont le nom et la description seront vide
             et à partir de la variable request on la remplie avec les infos recuperees*/
 
-        $category = new FlowCategory();
+        $flowcategory = new FlowCategory();
 
-        $category->fill($request->all());
+        $flowcategory->fill($request->all());
 
-        $category->save();
+        $flowcategory->save();
 
-        return $request->json ?? false ? $category->toJson() : redirect('/accounting/flowcategories');
+        return $request->json ?? false ? $flowcategory->toJson() : redirect('/accounting/flowcategories');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\FlowCategory  $category
+     * @param  \App\FlowCategory  $flowcategory
      * @return \Illuminate\Http\Response
      */
-    public function show(FlowCategory $category, Request $request)
+    public function show(FlowCategory $flowcategory, Request $request)
     {
-        return $request->json ?? false ? $category->toJson() : view('flowcategories.show', ["category" => $category]);
+        return $request->json ?? false ? $flowcategory->toJson() : view('flowcategories.show', ["flowcategory" => $flowcategory]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\FlowCategory  $category
+     * @param  \App\FlowCategory  $flowcategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(FlowCategory $category)
+    public function edit()
     {
-        return view('flowcategories.edit', ["category" => $category]);
+        return view('flowcategories.edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\FlowCategory  $category
+     * @param  \App\FlowCategory  $flowcategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FlowCategory $category)
+    public function update(FlowCategory $flowcategory, Request $request)
     {
         $request->validate([
             "name" => "required|string|max:200",
             "desc" => "nullable|string|max:500"
         ]);
 
-        $category->fill($request->all());
-        $category->save();
+        $flowcategory->fill($request->all());
+        $flowcategory->save();
 
-        return $request->json ?? false ? $category->toJson() : redirect('/accounting/flowcategories');
+        return $request->json ?? false ? $flowcategory->toJson() : redirect('/accounting/flowcategories');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\FlowCategory  $category
+     * @param  \App\FlowCategory  $flowcategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FlowCategory $category, Request $request)
+    public function destroy(FlowCategory $flowcategory, Request $request)
     {
-        $category->delete();
+        $flowcategory->delete();
         return $request->json ?? false ? response()->json() : redirect('/accounting/flowcategories');
     }
 }

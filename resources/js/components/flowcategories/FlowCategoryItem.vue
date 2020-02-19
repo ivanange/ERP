@@ -3,7 +3,7 @@
     <b-list-group-item
       class="d-flex justify-content-between align-items-center w-100"
       v-if="listview && !force"
-      @click.stop="$router.push({ name:'ShowCategory', params: { propCategory: category, id: category.id } })"
+      @click.stop="$router.push({ name:'ShowFlowCategory', params: { propCategory: category, id: category.id } })"
     >
       <div
         class="d-flex justify-content-between align-items-center"
@@ -15,12 +15,12 @@
           style="width: calc( 100% -  350px );"
         >{{this.category.desc}}</span>
         <router-link
-          :to="{path: 'products', query:{ category: category.id} }"
+          :to="{path: 'flows', query:{ category: category.id} }"
           class="text-dark"
           style=" width: 150px;"
           :id="category.id"
           @click.stop
-        >Show products</router-link>
+        >Show flows</router-link>
       </div>
       <font-awesome-icon
         class="d-inline-block mr-4 text-muted font-weight-lighter"
@@ -33,7 +33,7 @@
 
     <b-card
       class="shadow-sm h-100"
-      @click.stop.prevent="$router.push({ name:'ShowCategory', params: { propCategory: category, id: category.id } })"
+      @click.stop.prevent="$router.push({ name:'ShowFlowCategory', params: { propCategory: category, id: category.id } })"
       v-else
     >
       <b-card-text class="h3 truncate" style="color: #023000;">{{this.category.name}}</b-card-text>
@@ -41,7 +41,7 @@
 
       <div class="ml-auto w-100 d-flex justify-content-end mt-3" @click.stop>
         <router-link
-          :to="{path: 'products', query:{ category: category.id} }"
+          :to="{path: 'flows', query:{ category: category.id} }"
           class="text-decoration-none mr-auto text-muted"
           style="text-decoration: none"
           :id="category.id"
@@ -52,7 +52,7 @@
           icon="pencil-alt"
           size="lg"
           style="cursor:pointer;"
-          @click.stop="$router.push({ name:'EditCategory', params: { propCategory: category, id: category.id } })"
+          @click.stop="$router.push({ name:'EditFlowCategory', params: { propCategory: category, id: category.id } })"
         />
 
         <font-awesome-icon
@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  name: "CategoryItem",
+  name: "FlowCategoryItem",
   props: {
     category: {
       type: Object,

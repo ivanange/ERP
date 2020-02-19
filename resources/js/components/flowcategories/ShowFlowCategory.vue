@@ -5,13 +5,13 @@
       :state="true"
       :id="this.$route.params.id"
       classes="custom-content"
-      @closed="$router.push('/stock/categories')"
+      @closed="$router.push('/accounting/flowcategories')"
     >
       <div
         class="border-0 d-flex justify-content-center align-items-center w-100"
         style=" background-color: transparent;"
       >
-        <CategoryItem
+        <FlowCategoryItem
           :category="category"
           v-if="category"
           :force="true"
@@ -25,19 +25,19 @@
 </template>
 
 <script>
-import CategoryItem from "./CategoryItem";
+import FlowCategoryItem from "./FlowCategoryItem";
 import ModalWrapper from "../ModalWrapper";
 
 export default {
-  name: "ShowCategory",
+  name: "ShowFlowCategory",
   components: {
-    CategoryItem,
+    FlowCategoryItem,
     ModalWrapper
   },
   props: ["propCategory"],
   computed: {
     category: function() {
-      return this.propCategory || this.getCategory(this.$route.params.id);
+      return this.propCategory || this.getFlowCategory(this.$route.params.id);
     }
   }
 };

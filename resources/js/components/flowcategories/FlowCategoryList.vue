@@ -12,7 +12,7 @@
         </div>
         <span class="font-weight-bold">Actions</span>
       </b-list-group-item>
-      <CategoryItem
+      <FlowCategoryItem
         v-for="category in this.categoriesList"
         :category="category"
         target="confirmDelete"
@@ -30,7 +30,7 @@
       class="p-3 custom-scroll ovarflow-auto"
       style="max-height: 100%;"
     >
-      <CategoryItem
+      <FlowCategoryItem
         v-for="category in this.categoriesList"
         :category="category"
         target="confirmDelete"
@@ -63,11 +63,11 @@
 </template>
 
 <script>
-import CategoryItem from "./CategoryItem";
+import FlowCategoryItem from "./FlowCategoryItem";
 export default {
-  name: "CategoryList",
+  name: "FlowCategoryList",
   components: {
-    CategoryItem
+    FlowCategoryItem
   },
   props: {
     proplist: {
@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     categoriesList: function() {
-      return this.proplist || this.categoryList;
+      return this.proplist || this.flowcategoryList;
     }
   },
   watch: {
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     destroy: function() {
-      this.destroyCategory(this.id);
+      this.destroyFlowCategory(this.id);
     },
     confirm($event) {
       this.id = $event;

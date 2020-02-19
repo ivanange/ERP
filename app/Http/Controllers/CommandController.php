@@ -72,9 +72,9 @@ class CommandController extends Controller
      * @param  \App\Command  $command
      * @return \Illuminate\Http\Response
      */
-    public function edit(Command $command)
+    public function edit()
     {
-        return view('commands.edit', ["command" => $command]);
+        return view('commands.edit');
     }
 
     /**

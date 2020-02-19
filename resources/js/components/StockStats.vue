@@ -26,7 +26,7 @@ export default {
       return Object.values(this.$store.state.products).reduce((obj, el) => {
         obj[el.id] = el.name;
         return obj;
-      });
+      }, {});
     },
     stats() {
       let stats = {

@@ -32,7 +32,7 @@ Route::middleware(['json', 'auth:web'])->group(function () {
         ]);
     });
 
-    Route::prefix('accounting')->group(function () {
+    Route::prefix('payroll')->group(function () {
         Route::apiResources([
             'post' => 'PostController',
             'departments' => 'DepartmentController',
@@ -40,7 +40,8 @@ Route::middleware(['json', 'auth:web'])->group(function () {
         ]);
     });
 
-    Route::prefix('payroll')->group(function () {
+    Route::prefix('accounting')->group(function () {
+        Route::get("/total", "FlowController@total");
         Route::apiResources([
             'flows' => 'FlowController',
             'flowcategories' => 'FlowcategoryController',

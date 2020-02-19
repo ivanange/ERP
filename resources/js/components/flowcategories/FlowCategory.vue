@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <CategoryList :proplist="searchResult" ref="category" />
+    <FlowCategoryList :proplist="searchResult" ref="flowcategory" />
     <router-view></router-view>
   </div>
 </template>
@@ -10,10 +10,10 @@
 import FlowCategoryList from "./FlowCategoryList";
 
 export default {
-  name: "Category",
-  title: "Categories",
+  name: "FlowCategory",
+  title: "Flow Categories",
   components: {
-    CategoryList
+    FlowCategoryList
   },
   data: function() {
     return {

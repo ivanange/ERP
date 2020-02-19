@@ -10,7 +10,7 @@
 import StockNavbar from "./StockNavbar";
 export default {
   name: "StockStats",
-  title: "Stats",
+  title: "Stock",
   components: {
     StockNavbar
   }

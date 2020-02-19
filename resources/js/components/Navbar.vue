@@ -6,7 +6,7 @@
       <b-navbar-nav class="ml-5 pl-5">
         <b-nav-item :to="'/home'">Home</b-nav-item>
         <b-nav-item :to="'/stock/'">Categories</b-nav-item>
-        <b-nav-item :href="'/accounting'">Acounting</b-nav-item>
+        <b-nav-item :to="'/accounting'">Acounting</b-nav-item>
         <b-nav-item :href="'/payroll'">Payroll</b-nav-item>
       </b-navbar-nav>
       <font-awesome-icon

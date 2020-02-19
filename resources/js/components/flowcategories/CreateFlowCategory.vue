@@ -1,15 +1,15 @@
 <template>
-  <ModalWrapper :state="true" @closed="$router.push('/stock/categories')">
-    <StoreCategory @saved="$router.push('/stock/categories')" />
+  <ModalWrapper :state="true" @closed="$router.push('/accounting/categories')">
+    <StoreCategory @saved="$router.push('/accounting/flowcategories')" :categoryType="'FlowCategory'" />
   </ModalWrapper>
 </template>
 
 <script>
-import StoreCategory from "./StoreCategory";
+import StoreCategory from "../categories/StoreCategory";
 import ModalWrapper from "../ModalWrapper";
 
 export default {
-  name: "CreateCategory",
+  name: "CreateFlowCategory",
   components: {
     StoreCategory,
     ModalWrapper

@@ -8,7 +8,7 @@ class FlowCategory extends Model
 {
     public $timestamps = false;
     protected $table = 'flowcategory';
-    protected $fillable = ['name', 'desc'];
+    protected $fillable = ['name', 'desc', 'id'];
 
     public function flows()
     {

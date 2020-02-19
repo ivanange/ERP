@@ -31,7 +31,7 @@
           class="ml-auto mr-3 h2"
           icon="plus-circle"
           style="color: var(--dark); cursor:pointer;"
-          @click.stop="$router.push('/stock/categories/create')"
+          @click.stop="$router.push('/stock/flowcategories/create')"
         />
       </div>
     </form>
@@ -41,7 +41,7 @@
 <script>
 import { debounce } from "lodash";
 export default {
-  name: "CategorySidebar",
+  name: "FlowCategorySidebar",
   data: function() {
     return {
       filters: {
@@ -67,7 +67,7 @@ export default {
     }, 1500),
 
     search() {
-      return this.categoryList.filter(
+      return this.flowcategoryList.filter(
         category =>
           (category.name + category.desc)
             .toLowerCase()
@@ -77,7 +77,7 @@ export default {
   },
   created: function() {
     this.$store.watch(
-      (state, getters) => getters.categoryList,
+      (state, getters) => getters.flowcategoryList,
       () => {
         this.update();
       },

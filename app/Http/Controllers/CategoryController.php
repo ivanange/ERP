@@ -74,9 +74,9 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit()
     {
-        return view('categories.edit', ["category" => $category]);
+        return view('categories.edit');
     }
 
     /**

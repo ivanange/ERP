@@ -2,6 +2,8 @@
 
 namespace App;
 
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
 
 class Flow extends Model
@@ -27,12 +29,19 @@ class Flow extends Model
     public function updateDues()
     {
         if ($this->amount and $this->frequency) {
-            $lastDueDate = $this->dues()->orderBy('created_at')->first()->created_at;
+            $dues = [];
+            $lastDueDate = $this->dues()->latest()->first()->created_at;
             $now = time();
-            while ($now >= ($lastDueDate = strtotime($this->frequency, $lastDueDate))) {
+            while ($now >= ($lastDueDate = strtotime($this->frequency, strtotime($lastDueDate . ' utc')))) {
+                $lastDueDate = (new DateTime("now", new DateTimeZone('UTC')))
+                    ->setTimestamp($lastDueDate)
+                    ->format('Y-m-d H:i:s');
                 $due = new \App\Due(['amount' => $this->amount]);
-                $due->created_at = gmdate('Y-m-d H:i:s');
-                $this->dues()->save($due);
+                $due->created_at = $lastDueDate;
+                $dues[] = $due;
+            }
+            if (count($dues)) {
+                $this->dues()->saveMany($dues);
             }
         }
 
