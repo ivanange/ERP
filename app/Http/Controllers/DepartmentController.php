@@ -14,7 +14,11 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $depts = Department::all();
+
+        return view('departments.index',[
+            'depts' => $depts, 
+        ]);   
     }
 
     /**
@@ -24,7 +28,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -33,9 +37,18 @@ class DepartmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        request()->validate([
+            'name' => ['required'],
+        ]);
+
+        $dept = Department::create([
+            'name' => request('name'),
+            'desc' => request('desc'),
+        ]);
+
+        return 'Vous avez creer un nouveau Département';
     }
 
     /**
