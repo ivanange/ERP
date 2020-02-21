@@ -31,14 +31,19 @@ class Flow extends Model
         if (!is_null($this->amount) && !is_null($this->frequency)) {
             $dues = [];
             $now = time();
-            $lastDueDate = $this->dues()->latest()->first()->created_at ?? gmdate('Y-m-d H:i:s', $now);
 
-            while ($now >= ($lastDueDate = strtotime($this->frequency, strtotime($lastDueDate . ' utc')))) {
-                $lastDueDate = (new DateTime("now", new DateTimeZone('UTC')))
+            $lastDueDate = $this->dues()->latest()->first()->created_at ?? gmdate('Y-m-d H:i:s e', $now);
+            $lastDueDate = is_object($lastDueDate) ? $lastDueDate->format('Y-m-d H:i:s e') : $lastDueDate;
+            $lastDueDate =  strtotime($lastDueDate);
+
+
+            while ($now >= ($lastDueDate = strtotime($this->frequency, $lastDueDate))) {
+                $created_at = (new DateTime("now", new DateTimeZone('UTC')))
                     ->setTimestamp($lastDueDate)
                     ->format('Y-m-d H:i:s');
+
                 $due = new \App\Due(['amount' => $this->amount]);
-                $due->created_at = $lastDueDate;
+                $due->created_at = $created_at;
                 $dues[] = $due;
             }
             if (count($dues)) {

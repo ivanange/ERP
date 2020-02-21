@@ -14,16 +14,16 @@ class Worker extends Authenticatable
 
     public $fillable = [
         'username', 'name', 'password', 'surname', 'telephone', 'birthdate', 'email',
-        'title', 'gender', 'address', 'permissions', 'post_id'
+        'title', 'gender', 'address', 'permissions', 'post_id','prime'
     ];
     public $timestamps = false;
     protected $hidden = [
-        // 'password', 'remember_token',
+         'password', 'remember_token',
     ];
 
     public function post()
     {
-        return $this->hasOne('App\Post');
+        return $this->belongsTo('App\Post');
     }
 
     public function department()

@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
             return view('welcome');
         });
 
-        Route::apiResources([
+        Route::resources([
             'categories' => 'CategoryController',
             'products' => 'ProductController',
             'commands' => 'CommandController',
@@ -52,12 +52,23 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('payroll')->group(function () {
-        Route::apiResources([
+        Route::resources([
             'post' => 'PostController',
             'departments' => 'DepartmentController',
             'workers' => 'WorkerController',
         ]);
+        Route::get('', 'PayController@affiche');
+        Route::get('/posts', 'PostController@index'); // on doit etre renvoyé sur le dashboard
+        Route::post('/posts', 'PostController@store'); // enregistrer un poste
+        Route::get('/departments', 'DepartmentController@index');
+        Route::post('/departments', 'DepartmentController@store');
+        Route::get('/workers', 'WorkerController@index');
+        Route::post('/workers', 'WorkerController@store');
+        Route::get('/paie', 'BulltinController@index');
+        Route::get('/paie/{Worker}/bulletin', 'EditController@affiche');
+        Route::post('/paie/{Worker}/bulletin', 'WorkerController@update');
     });
+
 
     Route::prefix('accounting')->group(function () {
         Route::get('', function () {
@@ -66,7 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/stats', function () {
             return view('welcome');
         });
-        Route::apiResources([
+        Route::resources([
             'flows' => 'FlowController',
             'flowcategories' => 'FlowcategoryController',
         ]);

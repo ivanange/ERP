@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Worker;
+use App\Post;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class WorkerController extends Controller
@@ -14,7 +17,13 @@ class WorkerController extends Controller
      */
     public function index()
     {
-        //
+        $workers = Worker::with('post')->get();
+        $posts = Post::all();
+
+        return view('workers.index',[
+            'workers' => $workers,
+            'posts' => $posts, 
+        ]);  
     }
 
     /**
@@ -33,9 +42,37 @@ class WorkerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        request()->validate([
+            'username' => ['required'],
+            'name' => ['required'],
+            'surname' => ['required'],
+            'telephone' => ['required'],
+            'birthday' => ['required'],
+            'genre' => ['required'],
+            'adresse' => ['required'],
+            'email' => ['email'],
+            'pass' => ['required'],
+            'poste' => ['required'],
+            'titre' => ['required']
+        ]);
+
+        $worker = Worker::create([
+            'username' => request('username'),
+            'name' => request('name'),
+            'surname' => request('surname'),
+            'telephone' => request('telephone'),
+            'birthday' => request('birthday'),
+            'gender' => request('genre'),
+            'email' => request('email'),
+            'address' => request('adresse'),
+            'password' => request('pass'),
+            'post_id' => request('poste'),
+            'title' => request('titre'),
+        ]);
+
+        return 'Vous avez enregistrer un employé';
     }
 
     /**
@@ -67,9 +104,17 @@ class WorkerController extends Controller
      * @param  \App\Worker  $worker
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Worker $worker)
+    public function update( $worker)
     {
-        //
+        request()->validate([
+            'heur_sup' => ['required']
+        ]);
+        
+        $affected = DB::table('workers')
+                    ->where('id',$worker)
+                    ->update(['prime' => 1000*request('heur_sup')]);
+
+        return 'worker '.$worker;
     }
 
     /**

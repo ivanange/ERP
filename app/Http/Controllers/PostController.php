@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Department;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,7 +15,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $depts = Department::all();
+        $posts = Post::with('department')->get();
+
+        return view('posts.index',[
+            'depts' => $depts, 
+            'posts' => $posts,
+        ]);   
     }
 
     /**
@@ -24,7 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -33,9 +40,22 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        request()->validate([
+            'name' => ['required'],
+            'salaire' => ['required'],
+            'departement' => ['required'],
+        ]);
+
+        $poste = Post::create([
+            'name' => request('name'),
+            'desc' => request('desc'),
+            'baseSalary' => request('salaire'),
+            'department_id' => request('departement'),
+        ]);
+
+        return 'Vous avez creer un nouveau poste';
     }
 
     /**
@@ -57,7 +77,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        
     }
 
     /**

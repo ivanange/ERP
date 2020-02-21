@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name', 'desc', 'department_id', 'baseSalary'];
+    protected $fillable = ['name', 'desc', 'baseSalary', 'department_id'];
 
     public function worker()
     {
-        return $this->belongsTo('App\Worker');
+        return $this->hasOne('App\Worker');
     }
 
     public function department()
