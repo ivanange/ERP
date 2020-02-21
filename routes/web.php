@@ -1,6 +1,7 @@
 <?php
 
 use App\Command;
+use App\Worker;
 
 
 /*
@@ -52,11 +53,13 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('payroll')->group(function () {
+        /*
         Route::resources([
             'post' => 'PostController',
             'departments' => 'DepartmentController',
             'workers' => 'WorkerController',
         ]);
+*/
         Route::get('', 'PayController@affiche');
         Route::get('/posts', 'PostController@index'); // on doit etre renvoyé sur le dashboard
         Route::post('/posts', 'PostController@store'); // enregistrer un poste
@@ -67,6 +70,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/paie', 'BulltinController@index');
         Route::get('/paie/{Worker}/bulletin', 'EditController@affiche');
         Route::post('/paie/{Worker}/bulletin', 'WorkerController@update');
+        Route::post('/paie/{worker}/pay', 'WorkerController@pay');
     });
 
 

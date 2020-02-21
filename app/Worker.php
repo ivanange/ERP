@@ -6,6 +6,7 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Larapack\ConfigWriter\Facade;
 
 class Worker extends Authenticatable
 {
@@ -14,12 +15,13 @@ class Worker extends Authenticatable
 
     public $fillable = [
         'username', 'name', 'password', 'surname', 'telephone', 'birthdate', 'email',
-        'title', 'gender', 'address', 'permissions', 'post_id','prime'
+        'title', 'gender', 'address', 'permissions', 'post_id', 'extraHours'
     ];
     public $timestamps = false;
     protected $hidden = [
-         'password', 'remember_token',
+        'password', 'remember_token',
     ];
+    protected $appends = ['salary'];
 
     public function post()
     {
@@ -29,5 +31,15 @@ class Worker extends Authenticatable
     public function department()
     {
         return $this->hasOneThrough('App\Department', 'App\Post');
+    }
+
+    public function getSalaryAttribute()
+    {
+        return $this->post->baseSalary + (config('app.config.payRate', 1000) * $this->extraHours);
+    }
+
+    public function dues()
+    {
+        return $this->morphMany('App\Due', 'dueable');
     }
 }

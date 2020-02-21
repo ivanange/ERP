@@ -1,5 +1,6 @@
 @extends('layouts.layout_admin')
 
+@section('title', 'Workers')
 
 @section('contenu')
 <link rel="stylesheet" href="Monstyle/style_agent.css">

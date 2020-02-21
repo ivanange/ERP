@@ -132,9 +132,8 @@ class FlowController extends Controller
         return $request->json ?? false ? response()->json() : redirect('/accounting/flows');
     }
 
-    public function total()
+    public function dues()
     {
-        $totalSalary = DB::table('workers')->join('posts', 'workers.post_id', '=', 'posts.id')->sum('baseSalary');
-        return response()->json(['total' => $totalSalary]);
+        return \App\Due::all()->toJson();
     }
 }

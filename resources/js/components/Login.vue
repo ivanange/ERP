@@ -75,6 +75,7 @@ export default {
         .then(res => {
           if (res.ok) {
             this.$store.commit("setLogged", true);
+            this.fetch();
             this.$router.push("/");
           }
         })

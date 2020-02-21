@@ -9,8 +9,8 @@ class Due extends Model
     public $table = "due";
     protected $fillable = ['amount', 'flow_id'];
 
-    public function flow()
+    public function dueable()
     {
-        return $this->belongsTo('App\Flow');
+        return $this->morphTo();
     }
 }

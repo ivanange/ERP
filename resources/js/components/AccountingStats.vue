@@ -25,6 +25,13 @@
 </template>
 
 <script>
+import Chart from "chart.js";
+/* produce charts : ( with time filter )
+for cash ins and outs without category
+for each flow category 
+for each product ( amount sold )
+
+*/
 export default {
   name: "AccountingStats",
   title: "Stats",

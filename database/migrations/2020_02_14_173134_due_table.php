@@ -16,14 +16,11 @@ class DueTable extends Migration
         Schema::create('due', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedDecimal('amount', 20, 4);
-            $table->unsignedBigInteger('flow_id')->nullable();
+            $table->unsignedBigInteger('dueable_id')->nullable();
+            $table->string('dueable_type')->nullable();
             $table->timestamps();
         });
 
-        Schema::table('due', function (Blueprint $table) {
-            $table->foreign('flow_id')
-                ->references('id')->on('flows')->onDelete('set null');
-        });
     }
 
     /**

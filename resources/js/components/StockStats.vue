@@ -15,6 +15,12 @@
 </template>
 
 <script>
+import Chart from "chart.js";
+/* produce charts : ( with time filter )
+²for each flow category ( qte sold)
+for each product ( qte sold )
+
+*/
 export default {
   name: "StockStats",
   title: "Stats",

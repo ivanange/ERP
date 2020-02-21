@@ -2,6 +2,11 @@
 
 return [
 
+    'config' => [
+        'payRate' => 1000,
+        "currency" => 'XAF',
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -137,6 +142,7 @@ return [
 
     'providers' => [
 
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -199,7 +205,7 @@ return [
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
-        'Config' => Illuminate\Support\Facades\Config::class,
+        'Config' => Larapack\ConfigWriter\Facade::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,

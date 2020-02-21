@@ -33,9 +33,13 @@ class ProductionSeeder extends Seeder
                 factory(App\Post::class, $faker->numberBetween(8, 12))->make()->toArray()
             );
 
-            $posts->each(function ($post) {
-                $post->worker()->create(
-                    factory(App\Worker::class)->make(['post_id' => $post->id])->toArray()
+            $posts->each(function ($post) use ($faker) {
+                $worker = factory(App\Worker::class)->make(['post_id' => $post->id]);
+                $post->worker()->save($worker);
+                $worker->dues()->createMany(
+                    factory(App\Due::class, $faker->numberBetween(1, 3))->make([
+                        'amount' => $worker->salary
+                    ])->toArray()
                 );
             });
         });

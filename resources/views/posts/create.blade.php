@@ -1,5 +1,7 @@
 @extends('/layouts/layout_admin')
 
+@section('title', 'Posts')
+
 @section('contenu')
 <link rel="stylesheet" href="Monstyle/style_agence.css">
     <ol class="breadcrumb">

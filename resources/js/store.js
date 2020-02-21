@@ -66,7 +66,7 @@ const state = {
         loaded: false,
         logged: false,
         loadCounter: 0,
-        totalSalary: 0,
+        dues: [],
         expiryInterval: {
             days: 30
         },
@@ -121,8 +121,8 @@ const state = {
         setLogged(state, logged) {
             state.logged = logged;
         },
-        setTotal(state, total) {
-            state.totalSalary = total;
+        setDues(state, dues) {
+            state.dues = dues;
         },
         setNames(state, names) {
             state.names = names;
@@ -534,10 +534,10 @@ const state = {
             });
         },
 
-        getTotalSalary(context) {
-            Vue.http.get('/api/accounting/total').then(res => {
+        getDues(context) {
+            Vue.http.get('/api/accounting/dues').then(res => {
                 if (res.ok) {
-                    context.commit("setTotal", res.body.total);
+                    context.commit("setDues", res.body);
                 } else {
                     // manage small quirks uath, validation, etc
                 }
@@ -565,7 +565,7 @@ const state = {
 const stateMap = {
     ...mapState([
         "lang",
-        "totalSalary",
+        "dues",
         "loaded",
         "logged",
         "currency",
@@ -628,7 +628,7 @@ const stateMap = {
 const actions = mapActions([
     "fetchNames",
     "logout",
-    "getTotalSalary",
+    "getDues",
 
     // Commands
 

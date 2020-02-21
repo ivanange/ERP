@@ -23,7 +23,7 @@ class Flow extends Model
 
     public function dues()
     {
-        return $this->hasMany('App\Due');
+        return $this->morphMany('App\Due', 'dueable');
     }
 
     public function updateDues()

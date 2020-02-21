@@ -41,7 +41,7 @@ Route::middleware(['json', 'auth:web'])->group(function () {
     });
 
     Route::prefix('accounting')->group(function () {
-        Route::get("/total", "FlowController@total");
+        Route::get("/dues", "FlowController@dues");
         Route::apiResources([
             'flows' => 'FlowController',
             'flowcategories' => 'FlowcategoryController',

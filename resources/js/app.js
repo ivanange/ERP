@@ -112,6 +112,14 @@ Vue.mixin({
         },
         toggleView() {
             this.$root.isListview = !this.$root.isListview;
+        },
+        fetch() {
+            this.fetchCommands();
+            this.fetchProducts();
+            this.fetchCategories();
+            this.fetchFlowCategories();
+            this.fetchFlows();
+            this.getDues();
         }
     },
 
@@ -157,12 +165,7 @@ const vm = new Vue({
             (state, getters) => state.logged,
             () => {
                 if (this.logged) {
-                    this.fetchCommands();
-                    this.fetchProducts();
-                    this.fetchCategories();
-                    this.fetchFlowCategories();
-                    this.fetchFlows();
-                    this.getTotalSalary();
+                    this.fetch()
                 }
             }, {
                 immediate: true,

@@ -15,15 +15,15 @@ class WorkerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $workers = Worker::with('post')->get();
-        $posts = Post::all();
+        $workers = Worker::with(['post', 'dues'])->get();
 
-        return view('workers.index',[
-            'workers' => $workers,
-            'posts' => $posts, 
-        ]);  
+        return $request->json ? $workers->toJson() :
+            view('workers.index', [
+                'workers' => $workers,
+                'posts' => Post::all()
+            ]);
     }
 
     /**
@@ -45,17 +45,17 @@ class WorkerController extends Controller
     public function store()
     {
         request()->validate([
-            'username' => ['required'],
-            'name' => ['required'],
-            'surname' => ['required'],
-            'telephone' => ['required'],
-            'birthday' => ['required'],
-            'genre' => ['required'],
-            'adresse' => ['required'],
-            'email' => ['email'],
-            'pass' => ['required'],
-            'poste' => ['required'],
-            'titre' => ['required']
+            'username' => ['required', 'unique:workers'],
+            'name' => ['required', 'string'],
+            'surname' => ['required', 'string'],
+            'telephone' => ['required', 'string'],
+            'birthday' => ['required', 'string'],
+            'genre' => ['required', 'string', 'in:Male,Female'],
+            'adresse' => ['required', 'string'],
+            'email' => ['nullable', 'email'],
+            'pass' => ['required', 'string'],
+            'poste' => ['required', 'exist:posts'],
+            'titre' => ['required', 'string']
         ]);
 
         $worker = Worker::create([
@@ -63,16 +63,17 @@ class WorkerController extends Controller
             'name' => request('name'),
             'surname' => request('surname'),
             'telephone' => request('telephone'),
-            'birthday' => request('birthday'),
+            'birthdate' => request('birthday'),
             'gender' => request('genre'),
             'email' => request('email'),
             'address' => request('adresse'),
             'password' => request('pass'),
             'post_id' => request('poste'),
             'title' => request('titre'),
+            'extraHours' => request('extraHours'),
         ]);
 
-        return 'Vous avez enregistrer un employé';
+        return  view('workers.index', ['message' => 'Vous avez enregistrer un employé']);
     }
 
     /**
@@ -104,17 +105,18 @@ class WorkerController extends Controller
      * @param  \App\Worker  $worker
      * @return \Illuminate\Http\Response
      */
-    public function update( $worker)
+    public function update($worker)
     {
         request()->validate([
-            'heur_sup' => ['required']
+            'heur_sup' => ['required', 'integer']
         ]);
-        
-        $affected = DB::table('workers')
-                    ->where('id',$worker)
-                    ->update(['prime' => 1000*request('heur_sup')]);
 
-        return 'worker '.$worker;
+        $affected = DB::table('workers')
+            ->where('id', $worker)
+            ->update(['extraHours' =>  request('heur_sup')]);
+        // config('app.config.payRate') *
+
+        return redirect('/payroll/workers');
     }
 
     /**
@@ -131,5 +133,13 @@ class WorkerController extends Controller
     public function names()
     {
         return Worker::all()->pluck("username")->toJson();
+    }
+
+    public function pay(Worker $worker)
+    {
+        $worker->dues()->create(['amount' => $worker->salary]);
+        $worker->extraHours = 0;
+        $worker->save();
+        return  view('workers.index', ['message' => 'Vous avez payer un employé' . $worker->name]);
     }
 }

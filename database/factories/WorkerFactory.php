@@ -34,6 +34,7 @@ $factory->define(Worker::class, function (Faker $faker) {
         'username' => $faker->unique()->userName,
         'password' => Hash::make('password'), // password
         'remember_token' => Str::random(10),
+        'extraHours' => $faker->numberBetween(0, 40),
     ];
 });
 

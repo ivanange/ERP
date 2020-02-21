@@ -14,7 +14,7 @@ class AddAdvantageColum extends Migration
     public function up()
     {
         Schema::table('workers', function (Blueprint $table) {
-            $table->unsignedDecimal('prime', 20, 4)->nullable();
+            $table->unsignedInteger('extraHours')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddAdvantageColum extends Migration
     public function down()
     {
         Schema::table('workers', function (Blueprint $table) {
-            $table->dropColumn("prime");
+            $table->dropColumn("extraHours")->default(0);
         });
     }
 }

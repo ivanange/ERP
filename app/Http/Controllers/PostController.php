@@ -18,10 +18,10 @@ class PostController extends Controller
         $depts = Department::all();
         $posts = Post::with('department')->get();
 
-        return view('posts.index',[
-            'depts' => $depts, 
+        return view('posts.index', [
+            'depts' => $depts,
             'posts' => $posts,
-        ]);   
+        ]);
     }
 
     /**
@@ -31,7 +31,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        
     }
 
     /**
@@ -55,7 +54,7 @@ class PostController extends Controller
             'department_id' => request('departement'),
         ]);
 
-        return 'Vous avez creer un nouveau poste';
+        return  view('posts.index', ['message' => 'Vous avez creer un nouveau poste']);
     }
 
     /**
@@ -77,7 +76,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        
     }
 
     /**
