@@ -33,10 +33,16 @@ class Worker extends Authenticatable
         return $this->hasOneThrough('App\Department', 'App\Post');
     }
 
+    public function getPrimeAttribute()
+    {
+        return (config('app.config.payRate', 1000) * $this->extraHours);
+    }
+
     public function getSalaryAttribute()
     {
-        return $this->post->baseSalary + (config('app.config.payRate', 1000) * $this->extraHours);
+        return $this->post->baseSalary + $this->prime;
     }
+
 
     public function dues()
     {

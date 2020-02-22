@@ -141,6 +141,6 @@ class WorkerController extends Controller
         $worker->dues()->create(['amount' => $worker->salary]);
         $worker->extraHours = 0;
         $worker->save();
-        return  $this->index($request, 'Vous avez payer un employé' . $worker->name);
+        return  app('App\Http\Controllers\BulltinController')->getPrintReport()->index('Vous avez payer un employé ' . $worker->name . ' ' . $worker->surname);
     }
 }

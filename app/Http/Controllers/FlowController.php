@@ -134,6 +134,6 @@ class FlowController extends Controller
 
     public function dues()
     {
-        return \App\Due::all()->toJson();
+        return \App\Due::with("dueable")->get()->toJson();
     }
 }

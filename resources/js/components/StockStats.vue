@@ -17,7 +17,7 @@
 <script>
 import Chart from "chart.js";
 /* produce charts : ( with time filter )
-²for each flow category ( qte sold)
+²for each product category ( qte sold)
 for each product ( qte sold )
 
 */
