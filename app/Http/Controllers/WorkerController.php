@@ -15,14 +15,15 @@ class WorkerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $message = null)
     {
         $workers = Worker::with(['post', 'dues'])->get();
 
         return $request->json ? $workers->toJson() :
             view('workers.index', [
                 'workers' => $workers,
-                'posts' => Post::all()
+                'posts' => Post::all(),
+                'message' => $message
             ]);
     }
 
@@ -42,7 +43,7 @@ class WorkerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
         request()->validate([
             'username' => ['required', 'unique:workers'],
@@ -54,8 +55,8 @@ class WorkerController extends Controller
             'adresse' => ['required', 'string'],
             'email' => ['nullable', 'email'],
             'pass' => ['required', 'string'],
-            'poste' => ['required', 'exist:posts'],
-            'titre' => ['required', 'string']
+            'poste' => ['required', 'exists:posts,id'],
+            'titre' => ['nullable', 'string']
         ]);
 
         $worker = Worker::create([
@@ -73,7 +74,7 @@ class WorkerController extends Controller
             'extraHours' => request('extraHours'),
         ]);
 
-        return  view('workers.index', ['message' => 'Vous avez enregistrer un employé']);
+        return  $this->index($request, 'Vous avez enregistrer un employé');
     }
 
     /**
@@ -125,7 +126,7 @@ class WorkerController extends Controller
      * @param  \App\Worker  $worker
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Worker $worker)
+    public function destroy(Worker $worker, Request $request)
     {
         //
     }
@@ -135,11 +136,11 @@ class WorkerController extends Controller
         return Worker::all()->pluck("username")->toJson();
     }
 
-    public function pay(Worker $worker)
+    public function pay(Worker $worker, Request $request)
     {
         $worker->dues()->create(['amount' => $worker->salary]);
         $worker->extraHours = 0;
         $worker->save();
-        return  view('workers.index', ['message' => 'Vous avez payer un employé' . $worker->name]);
+        return  $this->index($request, 'Vous avez payer un employé' . $worker->name);
     }
 }
